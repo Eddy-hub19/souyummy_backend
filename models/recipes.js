@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
 const ingredientSchema = Schema({
   ingredient: {
@@ -11,11 +11,11 @@ const ingredientSchema = Schema({
   },
   imgURL: {
     type: String,
-    default: '',
+    default: "",
   },
   description: {
     type: String,
-    default: '',
+    default: "",
   },
   id: {
     type: String,
@@ -23,11 +23,13 @@ const ingredientSchema = Schema({
   _id: false,
 });
 
+const Ingredient = model("ingredient", ingredientSchema);
+
 const recipeSchema = Schema(
   {
     imgURL: {
       type: String,
-      default: '',
+      default: "",
     },
     title: {
       type: String,
@@ -52,15 +54,16 @@ const recipeSchema = Schema(
     },
     owner: {
       type: Schema.Types.ObjectId,
-      ref: 'user',
+      ref: "user",
       required: true,
     },
   },
   { timestamps: true }
 );
 
-const Recipe = model('Recipe', recipeSchema);
+const Recipe = model("Recipe", recipeSchema);
 
 module.exports = {
   Recipe,
+  Ingredient,
 };
