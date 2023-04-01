@@ -11,6 +11,12 @@ router.post("/register", validateBody(schemas.registerSchema), crtl.register);
 
 router.post("/login", validateBody(schemas.loginSchema), crtl.login);
 
+router.post(
+  "/subscribe",
+  validateBody(schemas.subscribeSchema),
+  crtl.subscribe
+);
+
 router.get("/current", authenticate, crtl.getCurrent);
 
 router.post("/logout", authenticate, crtl.logout);
