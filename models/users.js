@@ -1,42 +1,67 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
+
+const mongooseErrorHandler = require("../helpers/handleMongooseError");
+
+const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = Schema(
-    {
-        name: {
-            type: String,
-            required: true,
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        password: {
-            type: String,
-            required: true,
-        },
-        token: {
-            type: String,
-            default: "",
-        },
-        avatarURL: {
-            type: String,
-            required: true,
-        },
-        verify: {
-            type: Boolean,
-            default: false,
-        },
-        verificationToken: {
-            type: String,
-            required: [true, "Verify token is required"],
-        },
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    { timestamps: true }
-)
+    email: {
+      type: String,
+      match: emailRegexp,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    token: {
+      type: String,
+      default: "",
+    },
+    avatarURL: {
+      type: String,
+      required: false,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [false, "Verify token is required"],
+    },
+  },
+  { versionKey: false, timestamps: true }
+);
 
-const User = model("user", userSchema)
+userSchema.post("save", mongooseErrorHandler);
+
+const registerSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().min(6).required(),
+});
+
+const loginSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().min(6).required(),
+});
+
+const schemas = {
+  registerSchema,
+  loginSchema,
+};
+
+const User = model("user", userSchema);
 
 module.exports = {
-    User,
-}
+  User,
+  schemas,
+};
