@@ -8,6 +8,9 @@ router.get("/popular", ctrl.getPopularRecipes);
 // router.get("/category-list", auth, ctrl.getCategories);
 router.get("/category-list", ctrl.getCategories);
 
+// router.get("/search/:keyWord", auth, ctrl.getRecipesByName)
+router.get("/search/:keyWord",  ctrl.getRecipesByName)
+
 router.get("/main-page", ctrl.getMainPageRecipes);
 
 
