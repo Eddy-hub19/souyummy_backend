@@ -17,6 +17,12 @@ router.post("/verify", validateBody(schemas.emailSchema), crtl.resendVerifyEmail
 //  sign-in
 router.post("/login", validateBody(schemas.loginSchema), crtl.login);
 
+router.post(
+  "/subscribe",
+  validateBody(schemas.subscribeSchema),
+  crtl.subscribe
+);
+
 router.get("/current", authenticate, crtl.getCurrent);
 
 router.post("/logout", authenticate, crtl.logout);

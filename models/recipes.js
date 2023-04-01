@@ -1,29 +1,27 @@
 const { Schema, model } = require("mongoose");
 
 const ingredientSchema = Schema({
-  ingredient: {
+  ttl: {
     type: String,
-    require: true,
+    default: "",
+    required: true,
   },
-  qty: {
+  desc: {
     type: String,
-    require: true,
+    default: "",
+    required: true,
   },
-  imgURL: {
+  t: {
     type: String,
     default: "",
   },
-  description: {
+  thb: {
     type: String,
-    default: "",
+    required: true,
   },
-  id: {
-    type: String,
-  },
-  _id: false,
 });
 
-const Ingredient = model("ingredient", ingredientSchema);
+const Ingredient = model("Ingradient", ingredientSchema);
 
 const recipeSchema = Schema(
   {

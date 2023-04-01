@@ -98,6 +98,28 @@ const login = async (req, res) => {
   });
 };
 
+const subscribe = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(401, "Email not found");
+  }
+  await User.findByIdAndUpdate(user._id, {
+    subscription: true,
+  });
+  const sendingEmail = {
+    to: email,
+    subject: "email verification",
+    html: `<p>  user subscribed </p>`,
+  };
+
+  await sendEmail(sendingEmail);
+
+  res.json({
+    message: "user subscribed, email sending success",
+  });
+};
+
 const getCurrent = async (req, res) => {
   const { email, name } = req.user;
   console.log(req.user);
@@ -121,4 +143,5 @@ module.exports = {
   login: controllersWraper(login),
   getCurrent: controllersWraper(getCurrent),
   logout: controllersWraper(logout),
+  subscribe: controllersWraper(subscribe),
 };
