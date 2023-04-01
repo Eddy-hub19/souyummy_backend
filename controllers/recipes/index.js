@@ -1,6 +1,7 @@
-const ctrlWrapper = require("../ctrlWrapper")
-const getCategories = require("./getCategories")
-
+const ctrlWrapper = require("../ctrlWrapper");
+// const getCategories = require("./getCategories");
+const getRecipeById = require("./getRecipeById");
 module.exports = {
-    getCategories: ctrlWrapper(getCategories),
-}
+  //   getCategories: ctrlWrapper(getCategories),
+  getRecipeById: ctrlWrapper(getRecipeById),
+};
