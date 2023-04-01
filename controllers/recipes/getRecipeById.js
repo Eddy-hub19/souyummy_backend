@@ -1,4 +1,4 @@
-const { Recipe } = require("../../models");
+const { Recipe } = require("../../models/");
 
 const getRecipeById = async (req, res) => {
   const { id } = req.params;
