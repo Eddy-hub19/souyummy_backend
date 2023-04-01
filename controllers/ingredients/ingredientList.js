@@ -1,12 +1,10 @@
 const { Ingredient } = require("../../models/recipes");
-console.log(Ingredient);
 
 const ingredientList = async (req, res) => {
-  const { id } = req.params;
-  console.log(id);
-  const result = await Ingredient.find();
+  const filter = {};
+  const result = await Ingredient.find(filter);
   console.log(result);
-  res.json(result);
+  res.json({ ingredients: result });
 };
 
 module.exports = ingredientList;
