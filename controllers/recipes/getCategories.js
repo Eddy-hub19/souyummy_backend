@@ -8,7 +8,6 @@ const getCategories = async(req, res) => {
        if (!uniqueCategories.includes(r)) 
         uniqueCategories.push(r);
     });
-
     res.json(uniqueCategories.sort())
 };
 
