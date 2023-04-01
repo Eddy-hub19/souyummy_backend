@@ -6,8 +6,8 @@ const swaggerDocument = require("./swagger.json")
 require("dotenv").config()
 
 
-const mainRouter = require("./routes/api/main")
-// const usersRouter = require("./routes/api/auth")
+// const mainRouter = require("./routes/api/main")
+const usersRouter = require("./routes/api/auth")
 // const ingredientsRouter = require("./routes/api/ingredients")
 // const recipesRouter = require("./routes/api/recipes")
 // const ownRecipesRouter = require("./routes/api/ownRecipes")
@@ -22,10 +22,9 @@ app.use(logger(formatsLogger))
 app.use(cors())
 app.use(express.json())
 
+// app.use("/", mainRouter)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
-
-app.use("/", mainRouter)
-// app.use("/auth", usersRouter)
+app.use("/auth", usersRouter)
 // app.use("/recipes", recipesRouter)
 // app.use("/ingredients", ingredientsRouter)
 // app.use("/own-recipes", ownRecipesRouter)
