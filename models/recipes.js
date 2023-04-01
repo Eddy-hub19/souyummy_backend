@@ -23,7 +23,7 @@ const ingredientSchema = Schema({
   _id: false,
 });
 
-const Ingredient = model("ingredient", ingredientSchema);
+const Ingredient = model("Ingredient", ingredientSchema);
 
 const recipeSchema = Schema(
   {
