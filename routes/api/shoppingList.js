@@ -7,12 +7,7 @@ const { addToShoppingListSchema } = require("../../models/shopingList");
 
 const router = express.Router();
 
-router.post(
-    "/",
-    authenticate,
-    validateBody(addToShoppingListSchema),
-    ctrl.addToShoppingList
-);
+router.post("/", authenticate, validateBody(addToShoppingListSchema), ctrl.addToShoppingList);
 
 router.get("/", authenticate, ctrl.getShoppingList);
 
