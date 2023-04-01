@@ -2,10 +2,11 @@ const bcrypt = require("bcrypt");
 const { User } = require("../../models/users");
 const jwt = require("jsonwebtoken");
 
-const { controllersWraper } = require("../../helpers");
+const { controllersWraper, sendEmail } = require("../../helpers");
 const { HttpError } = require("../../routes/errors/HttpErrors");
 
 const { SECRET_KEY } = process.env;
+const { BASE_URL } = process.env;
 
 const register = async (rec, res) => {
   const { email, password } = rec.body;
@@ -16,7 +17,10 @@ const register = async (rec, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
 
-  const newUser = await User.create({ ...rec.body, password: hashPassword });
+  const newUser = await User.create({
+    ...rec.body,
+    password: hashPassword,
+  });
 
   res.status(201).json({
     email: newUser.email,
@@ -48,6 +52,28 @@ const login = async (req, res) => {
   });
 };
 
+const subscribe = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  await User.findByIdAndUpdate(user._id, {
+    subscription: true,
+  });
+  res.json({
+    message: "Email verify success",
+  });
+  const sendingEmail = {
+    to: email,
+    subject: "email verification",
+    html: `<p> ${BASE_URL} subscribed to the newsletter from SoYummy</p>`,
+  };
+
+  await sendEmail(sendingEmail);
+  res.json({
+    message: "sending email success, user subscribed",
+  });
+};
+
 const getCurrent = async (req, res) => {
   const { email, name } = req.user;
   console.log(req.user);
@@ -67,6 +93,7 @@ const logout = async (req, res) => {
 module.exports = {
   register: controllersWraper(register),
   login: controllersWraper(login),
+  subscribe: controllersWraper(subscribe),
   getCurrent: controllersWraper(getCurrent),
   logout: controllersWraper(logout),
 };
