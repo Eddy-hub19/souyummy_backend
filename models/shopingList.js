@@ -1,4 +1,7 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
+
+const mongooseErrorHandler = require("../helpers/handleMongooseError");
 
 const shoppingListSchema = Schema(
   {
@@ -26,6 +29,15 @@ const shoppingListSchema = Schema(
   { versionKey: false }
 );
 
-const ShoppingList = model('shoppingList', shoppingListSchema);
+shoppingListSchema.post("save", mongooseErrorHandler);
 
-module.exports = { ShoppingList };
+const addToShoppingListSchema = Joi.object({
+  nameIngredient: Joi.string().required(),
+  weight: Joi.string().required(),
+  image: Joi.string().required(),
+  recipeId: Joi.string().required(),
+});
+
+const ShoppingList = model("shoppinglist", shoppingListSchema);
+
+module.exports = { ShoppingList, addToShoppingListSchema };
