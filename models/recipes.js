@@ -5,7 +5,6 @@ const ingredientSchema = Schema({
   desc: { type: String, require: true, default: "" },
   t: { type: String, require: true, default: "" },
   thb: { type: String, require: true, default: "" },
-  _id: false,
 });
 
 const Ingredient = model("Ingredient", ingredientSchema);
