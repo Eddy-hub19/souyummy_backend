@@ -1,24 +1,30 @@
 const { Schema, model } = require("mongoose");
 
 const ingredientSchema = Schema({
-  ttl: {
-    type: String,
-    default: "",
-    required: true,
-  },
-  desc: {
-    type: String,
-    default: "",
-    required: true,
-  },
-  t: {
-    type: String,
-    default: "",
-  },
-  thb: {
-    type: String,
-    required: true,
-  },
+  ttl: { type: String, require: true, default: "" },
+  desc: { type: String, require: true, default: "" },
+  t: { type: String, require: true, default: "" },
+  thb: { type: String, require: true, default: "" },
+  // ingredient: {
+  //   type: String,
+  //   require: true,
+  // },
+  // qty: {
+  //   type: String,
+  //   require: true,
+  // },
+  // imgURL: {
+  //   type: String,
+  //   default: "",
+  // },
+  // description: {
+  //   type: String,
+  //   default: "",
+  // },
+  // id: {
+  //   type: String,
+  // },
+  _id: false,
 });
 
 const Ingredient = model("Ingradient", ingredientSchema);
@@ -32,23 +38,73 @@ const recipeSchema = Schema(
     title: {
       type: String,
       required: true,
-    },
-    about: {
-      type: String,
-      required: true,
+      default: "",
     },
     category: {
       type: String,
       required: true,
+      default: "",
     },
-    cookingTime: {
+    area: {
       type: String,
       required: true,
+      default: "",
     },
-    ingredients: [ingredientSchema],
+    instructions: {
+      type: String,
+      required: true,
+      default: "",
+    },
     description: {
       type: String,
       required: true,
+      default: "",
+    },
+    thumb: {
+      type: String,
+      required: true,
+      default: "",
+    },
+    preview: {
+      type: String,
+      required: true,
+      default: "",
+    },
+    time: {
+      type: String,
+      required: true,
+      default: "",
+    },
+    popularity: {
+      type: Number,
+      required: true,
+      default: "",
+    },
+    favorites: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+    likes: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+    youtube: {
+      type: String,
+      required: true,
+      default: "",
+    },
+    tags: {
+      type: Array,
+      required: true,
+      default: [],
+    },
+
+    ingredients: {
+      type: Array,
+      required: true,
+      default: [],
     },
     owner: {
       type: Schema.Types.ObjectId,

@@ -2,9 +2,8 @@ const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
 const mongooseErrorHandler = require("../helpers/handleMongooseError");
-const { string } = require("joi");
 
-const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const emailRegexp = /^\w+([-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = Schema(
   {
@@ -41,10 +40,6 @@ const userSchema = Schema(
     verificationCode: {
       type: String,
       default: "",
-    },
-    cloudinary_id: {
-      type: String,
-      required: false,
     },
   },
   { versionKey: false, timestamps: true }
