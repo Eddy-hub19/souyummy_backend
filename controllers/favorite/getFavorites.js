@@ -1,64 +1,55 @@
-const { mongoose } = require('mongoose')
-const { setPaginationSlice } = require('../../helpers')
-const { User } = require('../../models/users')
-const { HttpError } = require('../../routes/errors/HttpErrors')
+const { User } = require("../../models/users");
+const { Recipe } = require("../../models/recipes");
+
+const { HttpError } = require("../../routes/errors/HttpErrors");
+const getRecipeIngredients = require("../../utils/getIngredientsForRecipe");
 
 const getFavorites = async (req, res) => {
-  const { _id } = req.user
+  const { authorization = "" } = req.headers;
+  const { _id } = req.user;
 
-  const data = await User.aggregate([
-    {
-      $match: { _id: mongoose.Types.ObjectId(_id) },
-    },
-    {
-      $project: {
-        favoriteFoods: 1,
-        _id: 0,
-      },
-    },
-    {
-      $unwind: '$favoriteFoods',
-    },
-    {
-      $lookup: {
-        from: 'popularfoods',
-        localField: 'favoriteFoods.foodId',
-        foreignField: '_id',
-        as: 'foodInfo',
-      },
-    },
-    {
-      $unwind: '$foodInfo',
-    },
-    {
-      $project: {
-        idFood: '$foodInfo.idFood',
-        addedOn: '$favoriteFoods.addedOn',
-        strFood: '$foodInfo.strFood',
-        strInstructions: '$foodInfo.strInstructions',
-        strFoodThumb: '$foodInfo.strFoodThumb',
-      },
-    },
-    {
-      $sort: { addedOn: -1 },
-    },
-  ])
+  const user = await User.findOne({ _id: _id });
 
-  const { page = 1, per_page = data.length } = req.query
-
-  if (data.length === 0) {
-    return res.json({ totalHits: 0, foods: [] })
+  if (!user) {
+    throw HttpError(401, "Unauthorized");
   }
 
-  const pagination = setPaginationSlice(page, per_page, data.length)
-  if (!pagination) {
-    throw HttpError(400, 'Incorrect params of pagination')
+  if (user.favorite.length <= 0) {
+    throw HttpError(404, `User ${user.name} dont have any favorite recepies`);
   }
 
-  res.json({
-    totalHits: data.length,
-    foods: data.slice(pagination.start, pagination.end),
-  })
-}
+  const data = await Recipe.find({ _id: { $in: user.favorite } });
 
-module.exports = getFavorites
+  const result = await Promise.all(
+    data.map(async (r) => {
+      return {
+        imgURL: r.imgURL,
+        _id: r._id,
+        title: r.title,
+        category: r.category,
+        area: r.area,
+        instructions: r.instructions,
+        description: r.description,
+        thumb: r.thumb,
+        preview: r.preview,
+        time: r.time,
+        popularity: r.popularity,
+        favorites: r.favorites,
+        likes: r.likes,
+        youtube: r.youtube,
+        tags: r.tags,
+        createdAt: r.createdAt,
+        updatedAt: r.updatedAt,
+        ingredients: await getRecipeIngredients(r.ingredients, authorization),
+      };
+    })
+  );
+
+  res.status(201).json({
+    status: `succes, we have found ${result.length} position(s)`,
+    code: 201,
+    result,
+  });
+};
+
+module.exports = getFavorites;

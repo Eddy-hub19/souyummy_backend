@@ -1,4 +1,9 @@
-const { Schema, model } = require('mongoose')
+const { Schema, model } = require("mongoose");
+const Joi = require("joi");
+
+const mongooseErrorHandler = require("../helpers/handleMongooseError");
+
+const emailRegexp = /^\w+([-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 
 const userSchema = Schema(
   {
@@ -8,6 +13,7 @@ const userSchema = Schema(
     },
     email: {
       type: String,
+      match: emailRegexp,
       required: true,
       unique: true,
     },
@@ -17,30 +23,63 @@ const userSchema = Schema(
     },
     token: {
       type: String,
-      default: '',
+      default: "",
     },
     avatarURL: {
       type: String,
-      required: true,
+      required: false,
     },
     verify: {
       type: Boolean,
       default: false,
     },
-    verificationToken: {
-      type: String,
-      required: [true, 'Verify token is required'],
+    subscription: {
+      type: Boolean,
+      default: false,
     },
-    // favorite: {
-    //     type: Array,
-    //     default: false,
-    // },
+    favorite: {
+      type: Array,
+      default: [],
+    },
+    verificationCode: {
+      type: String,
+      default: "",
+    },
   },
-  { timestamps: true },
-)
+  { versionKey: false, timestamps: true }
+);
 
-const User = model('user', userSchema)
+userSchema.post("save", mongooseErrorHandler);
+
+const registerSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().min(6).required(),
+});
+
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
+const loginSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+  password: Joi.string().min(6).required(),
+});
+
+const subscribeSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
+const schemas = {
+  registerSchema,
+  emailSchema,
+  loginSchema,
+  subscribeSchema,
+};
+
+const User = model("user", userSchema);
 
 module.exports = {
   User,
-}
+  schemas,
+};

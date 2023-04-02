@@ -1,39 +1,28 @@
-const { PopularFoods } = require('../../models/popularFoods')
-const { User } = require('../../models/users')
-const { httpError } = require('../../routes/errors/HttpErrors')
+const { User } = require("../../models/users");
+
+const { HttpError } = require("../../routes/errors/HttpErrors");
 
 const deleteFavorite = async (req, res) => {
-  const { idFood } = req.params
-  const userId = req.user._id
+  const { id } = req.params;
+  const { _id } = req.user;
 
-  const popularFood = await PopularFoods.findOne({
-    idFood,
-    users: userId,
-  })
+  const user = await User.findOne({ _id: _id });
 
-  if (!popularFood) {
-    throw httpError(404, `The food is not found`)
+  if (!user) {
+    throw HttpError(401, "Unauthorized");
   }
-  await User.updateOne(
-    { _id: userId },
-    { $pull: { favoriteFoods: { foodId: popularFood._id } } },
-  )
 
-  if (popularFood.users.length === 1) {
-    await PopularFoods.deleteOne({
-      idFood,
-      users: userId,
-    })
-  } else {
-    await PopularFoods.findOneAndUpdate(
-      { idFood, users: userId },
-      { $pull: { users: userId } },
-    )
+  if (!user.favorite.includes(id)) {
+    throw HttpError(404, `Sorry we couldnt find recepie with id ${id} in ${user.name} favorites`);
   }
-  res.json({
-    // id: idFood,
-    message: 'food deleted',
-  })
-}
 
-module.exports = deleteFavorite
+  user.favorite.pull(id);
+  await user.save();
+
+  res.status(201).json({
+    status: `Succes, recipe with id: ${id} was deleted from ${user.name} favorites`,
+    code: 201,
+  });
+};
+
+module.exports = deleteFavorite;
