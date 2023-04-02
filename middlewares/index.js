@@ -1,4 +1,4 @@
 const authenticate = require("./auth");
 const validateBody = require("./validateBody");
-
-module.exports = { authenticate, validateBody };
+const uploadCloud = require("./cloudinary");
+module.exports = { authenticate, validateBody, uploadCloud };
