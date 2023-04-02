@@ -1,0 +1,1 @@
+const favorite = require('./favorite')

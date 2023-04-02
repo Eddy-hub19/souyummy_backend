@@ -6,14 +6,14 @@ const messages = {
   404: 'Not found',
   405: 'Method not allowed',
   409: 'Conflict',
-};
+}
 
-const HttpError = (status, message = messages[status]) => {
-  const error = new Error(message);
-  error.status = status;
-  return error;
-};
+const httpError = (status, message = messages[status]) => {
+  const error = new Error(message)
+  error.status = status
+  return error
+}
 
 module.exports = {
-  HttpError,
-};
+  httpError,
+}

@@ -1,42 +1,46 @@
-const { Schema, model } = require("mongoose")
+const { Schema, model } = require('mongoose')
 
 const userSchema = Schema(
-    {
-        name: {
-            type: String,
-            required: true,
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-        },
-        password: {
-            type: String,
-            required: true,
-        },
-        token: {
-            type: String,
-            default: "",
-        },
-        avatarURL: {
-            type: String,
-            required: true,
-        },
-        verify: {
-            type: Boolean,
-            default: false,
-        },
-        verificationToken: {
-            type: String,
-            required: [true, "Verify token is required"],
-        },
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    { timestamps: true }
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    token: {
+      type: String,
+      default: '',
+    },
+    avatarURL: {
+      type: String,
+      required: true,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, 'Verify token is required'],
+    },
+    // favorite: {
+    //     type: Array,
+    //     default: false,
+    // },
+  },
+  { timestamps: true },
 )
 
-const User = model("user", userSchema)
+const User = model('user', userSchema)
 
 module.exports = {
-    User,
+  User,
 }
