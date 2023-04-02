@@ -15,4 +15,7 @@ router.get("/main-page", ctrl.getMainPageRecipes);
 
 router.get("/:id", auth, ctrl.getRecipeById);
 
+router.get("/category/:categoryName", ctrl.getRecipesByCategory);
+// router.get("/category/:category", auth, ctrl.getRecipesByCategory);
+
 module.exports = router;
