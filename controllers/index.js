@@ -2,7 +2,7 @@
 // const ingredients = require('./ingredients');
 const recipes = require("./recipes");
 // const favorite = require('./favorite');
-// const ownRecipes = require('./ownRecipes');
+const ownRecipes = require("./ownRecipes/index");
 // const shoppingList = require('./shoppingList');
 
 module.exports = {
@@ -10,6 +10,6 @@ module.exports = {
   // ingredients,
   recipes,
   // favorite,
-  // ownRecipes,
+  ownRecipes,
   // shoppingList,
 };

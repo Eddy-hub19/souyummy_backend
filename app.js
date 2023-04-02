@@ -9,7 +9,7 @@ require("dotenv").config();
 const usersRouter = require("./routes/api/auth");
 const ingredientsRouter = require("./routes/api/ingredients");
 const recipesRouter = require("./routes/api/recipes");
-// const ownRecipesRouter = require("./routes/api/ownRecipes")
+const ownRecipesRouter = require("./routes/api/ownRecipes");
 // const favoriteRouter = require("./routes/api/favorite")
 const shoppingListRouter = require("./routes/api/shoppingList");
 
@@ -25,7 +25,7 @@ app.use(express.json());
 app.use("/auth", usersRouter);
 app.use("/recipes", recipesRouter);
 app.use("/ingredients", ingredientsRouter);
-// app.use("/own-recipes", ownRecipesRouter)
+app.use("/own-recipes", ownRecipesRouter);
 // app.use("/favorite", favoriteRouter)
 app.use("/shopping-list", shoppingListRouter);
 
