@@ -5,25 +5,6 @@ const ingredientSchema = Schema({
   desc: { type: String, require: true, default: "" },
   t: { type: String, require: true, default: "" },
   thb: { type: String, require: true, default: "" },
-  // ingredient: {
-  //   type: String,
-  //   require: true,
-  // },
-  // qty: {
-  //   type: String,
-  //   require: true,
-  // },
-  // imgURL: {
-  //   type: String,
-  //   default: "",
-  // },
-  // description: {
-  //   type: String,
-  //   default: "",
-  // },
-  // id: {
-  //   type: String,
-  // },
   _id: false,
 });
 
@@ -77,27 +58,27 @@ const recipeSchema = Schema(
     },
     popularity: {
       type: Number,
-      required: true,
+      // required: true,
       default: "",
     },
     favorites: {
       type: Array,
-      required: true,
+      // required: true,
       default: [],
     },
     likes: {
       type: Array,
-      required: true,
+      // required: true,
       default: [],
     },
     youtube: {
       type: String,
-      required: true,
+      // required: true,
       default: "",
     },
     tags: {
       type: Array,
-      required: true,
+      // required: true,
       default: [],
     },
 
