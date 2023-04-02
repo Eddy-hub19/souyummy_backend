@@ -5,7 +5,6 @@ const deleteFromShoppingList = async (req, res) => {
   const { id } = req.params;
   const result = await ShoppingList.findByIdAndRemove(id);
   if (!result) {
-    th;
     throw HttpError(400);
   }
   res.status(200).json(result);

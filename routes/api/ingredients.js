@@ -4,7 +4,7 @@ const ingredientList = require("../../controllers/ingredients/");
 
 const router = express.Router();
 
-router.get("/", ingredientList);
+router.get("/list", ingredientList);
 // router.get("/recipes/:id/ingredients/", ingredientList);
 
 module.exports = router;
