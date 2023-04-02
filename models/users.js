@@ -37,6 +37,10 @@ const userSchema = Schema(
       type: Boolean,
       default: false,
     },
+    favorite: {
+      type: Array,
+      default: [],
+    },
     verificationCode: {
       type: String,
       default: "",

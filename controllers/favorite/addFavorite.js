@@ -1,61 +1,26 @@
-const { mongoose } = require('mongoose')
-const { User } = require('../../models')
-const { PopularFoods } = require('../../models/popularFoods')
-const { Recipe } = require('../../models/recipes')
-const { fetchRecipeById } = require('../../services')
+const { User } = require("../../models/users");
+
+const { HttpError } = require("../../routes/errors/HttpErrors");
 
 const addFavorite = async (req, res) => {
-  const { idFood: idRecipe } = req.body
-  const { _id } = req.user
+  const { id } = req.params;
+  const { _id } = req.user;
 
-  let isPopular = await PopularFoods.findOneAndUpdate(
-    { idFood: idRecipe },
-    { $addToSet: { users: _id } },
-  )
+  const user = await User.findOne({ _id: _id });
 
-  if (idRecipe.toString().length < 0) {
-    const { foods } = await fetchRecipeById(idRecipe)
-
-    const { idFood, strFood, strInstructions, strFoodThumb } = foods[0]
-
-    if (!isPopular) {
-      isPopular = await PopularFoods.create({
-        idFood,
-        strFood,
-        strInstructions,
-        strFoodThumb,
-        users: [_id],
-      })
-    }
-  } else {
-    const { title, description, imgURL } = await Recipe.findOne({
-      _id: idRecipe,
-      owner: _id,
-    })
-    if (!isPopular) {
-      isPopular = await PopularFoods.create({
-        idFood: idRecipe,
-        strFood: title,
-        strInstructions: description,
-        strFoodThumb: imgURL,
-        users: [_id],
-      })
-    }
+  if (!user) {
+    throw HttpError(401, "Unauthorized");
   }
 
-  if (isPopular) {
-    const newFavoriteRecipe = {
-      foodId: mongoose.Types.ObjectId(isPopular._id),
-      addedOn: new Date(),
-    }
-
-    await User.findOneAndUpdate(
-      { _id },
-      { $addToSet: { favoriteFoods: newFavoriteRecipe } },
-    )
+  if (user.favorite.includes(id)) {
+    throw HttpError(409, `Sorry, recipe with id: ${id} was added to ${user.name} favorites before`);
   }
+  user.favorite.push(id);
+  await user.save();
+  res.status(201).json({
+    status: `Succes, recipe with id: ${id} was added to ${user.name} favorites`,
+    code: 201,
+  });
+};
 
-  res.status(201).json({ message: 'Added to favorite' })
-}
-
-module.exports = addFavorite
+module.exports = addFavorite;
