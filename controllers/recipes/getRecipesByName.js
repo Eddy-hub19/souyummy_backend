@@ -12,16 +12,15 @@ const getRecipesByName = async(req, res) => {
     // by ingridients 
 
     let ingredient = await Ingredient.findOne({ttl: new RegExp(keyWord, 'i')}).exec();
-let id = JSON.parse(JSON.stringify(ingredient))._id;
-let objectId =  new mongoose.Types.ObjectId(id);
-let recepies2 = await Recipe.find( { "ingredients.id": objectId });
+    let id = JSON.parse(JSON.stringify(ingredient))._id;
+    let objectId =  new mongoose.Types.ObjectId(id);
+    let recepies2 = await Recipe.find( { "ingredients.id": objectId });
 
-res.json(recepies2.concat(recepies));
+    res.json(recepies2.concat(recepies));
+    
     }catch (e) {
         console.log(e);
     };
-
-
 };
 
 
