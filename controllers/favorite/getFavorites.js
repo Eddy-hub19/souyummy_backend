@@ -1,10 +1,11 @@
 const { User } = require("../../models/users");
 const { Recipe } = require("../../models/recipes");
-const { HttpError } = require("../../routes/errors/HttpErrors");
 
+const { HttpError } = require("../../routes/errors/HttpErrors");
 const getRecipeIngredients = require("../../utils/getIngredientsForRecipe");
 
 const getFavorites = async (req, res) => {
+  const { authorization = "" } = req.headers;
   const { _id } = req.user;
 
   const user = await User.findOne({ _id: _id });
@@ -14,12 +15,13 @@ const getFavorites = async (req, res) => {
   }
 
   if (user.favorite.length <= 0) {
-    throw HttpError(409, `User ${user.name} dont have any favorite recepies`);
+    throw HttpError(404, `User ${user.name} dont have any favorite recepies`);
   }
-  const result = await Recipe.find({ _id: { $in: user.favorite } });
 
-  const ss = await Promise.all(
-    result.map(async (r) => {
+  const data = await Recipe.find({ _id: { $in: user.favorite } });
+
+  const result = await Promise.all(
+    data.map(async (r) => {
       return {
         imgURL: r.imgURL,
         _id: r._id,
@@ -38,17 +40,15 @@ const getFavorites = async (req, res) => {
         tags: r.tags,
         createdAt: r.createdAt,
         updatedAt: r.updatedAt,
-        ingredients: await getRecipeIngredients(r.ingredients),
+        ingredients: await getRecipeIngredients(r.ingredients, authorization),
       };
     })
   );
 
-  console.log(ss);
-
   res.status(201).json({
     status: `succes, we have found ${result.length} position(s)`,
     code: 201,
-    result: ss,
+    result,
   });
 };
 

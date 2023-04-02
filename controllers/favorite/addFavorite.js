@@ -13,10 +13,12 @@ const addFavorite = async (req, res) => {
   }
 
   if (user.favorite.includes(id)) {
-    throw HttpError(409, `Sorry, recipe with id: ${id} was added to ${user.name} favorites before`);
+    throw HttpError(404, `Sorry, recipe with id: ${id} was added to ${user.name} favorites before`);
   }
+
   user.favorite.push(id);
   await user.save();
+
   res.status(201).json({
     status: `Succes, recipe with id: ${id} was added to ${user.name} favorites`,
     code: 201,

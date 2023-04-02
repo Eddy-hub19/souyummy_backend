@@ -13,10 +13,12 @@ const deleteFavorite = async (req, res) => {
   }
 
   if (!user.favorite.includes(id)) {
-    throw HttpError(409, `Sorry we couldnt find recepie with id ${id} in ${user.name} favorites`);
+    throw HttpError(404, `Sorry we couldnt find recepie with id ${id} in ${user.name} favorites`);
   }
+
   user.favorite.pull(id);
   await user.save();
+
   res.status(201).json({
     status: `Succes, recipe with id: ${id} was deleted from ${user.name} favorites`,
     code: 201,
