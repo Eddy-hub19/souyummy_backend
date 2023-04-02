@@ -1,11 +1,17 @@
 const { Recipe } = require("../../models/");
 
+const { HttpError } = require("../../routes/errors/HttpErrors");
 const getRecipeIngredients = require("../../utils/getIngredientsForRecipe");
 
 const getRecipeById = async (req, res) => {
+  const { authorization = "" } = req.headers;
   const { id } = req.params;
 
   const recepipe = await Recipe.findOne({ _id: id });
+
+  if (!recepipe) {
+    throw HttpError(404, `There is no recipe with id: ${id}`);
+  }
 
   const result = {
     imgURL: recepipe.imgURL,
@@ -25,7 +31,7 @@ const getRecipeById = async (req, res) => {
     tags: recepipe.tags,
     createdAt: recepipe.createdAt,
     updatedAt: recepipe.updatedAt,
-    ingredients: await getRecipeIngredients(recepipe.ingredients),
+    ingredients: await getRecipeIngredients(recepipe.ingredients, authorization),
   };
 
   res.json(result);
