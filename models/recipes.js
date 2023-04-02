@@ -27,7 +27,7 @@ const ingredientSchema = Schema({
   _id: false,
 });
 
-const Ingredient = model("Ingradient", ingredientSchema);
+const Ingredient = model("Ingredient", ingredientSchema);
 
 const recipeSchema = Schema(
   {
