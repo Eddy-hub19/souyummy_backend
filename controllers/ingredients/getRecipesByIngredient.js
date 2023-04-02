@@ -1,8 +1,9 @@
-const { Ingredient, Recipe } = require("../../models/recipes");
+const { Ingredient, Recipe } = require("../../models/index");
+const { firstCapitalLetter } = require("../../helpers/index");
 
 const getRecipesByIngredient = async (req, res) => {
   // const ingredientName = req.query.ttl;
-  const ingredientName = req.params.ingredientName;
+  const ingredientName = firstCapitalLetter(req.params.ingredientName);
 
   if (!ingredientName) {
     res.status(400).json({ error: "Не вказанний інградієнт" });
