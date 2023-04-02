@@ -2,8 +2,11 @@ const express = require("express");
 
 const crtl = require("../../controllers/users/auth");
 
-const { validateBody, authenticate } = require("../../middlewares");
+const { validateBody, authenticate, upload } = require("../../middlewares");
+
 const { schemas } = require("../../models/users");
+
+const { saveImages } = require("../../controllers/cloudinary");
 
 const router = express.Router();
 
@@ -17,14 +20,12 @@ router.post("/verify", validateBody(schemas.emailSchema), crtl.resendVerifyEmail
 //  sign-in
 router.post("/login", validateBody(schemas.loginSchema), crtl.login);
 
-router.post(
-  "/subscribe",
-  validateBody(schemas.subscribeSchema),
-  crtl.subscribe
-);
+router.post("/subscribe", validateBody(schemas.subscribeSchema), crtl.subscribe);
 
 router.get("/current", authenticate, crtl.getCurrent);
 
 router.post("/logout", authenticate, crtl.logout);
+
+router.post("/", upload.single("file"), saveImages);
 
 module.exports = router;
