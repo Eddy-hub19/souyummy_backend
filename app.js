@@ -25,10 +25,11 @@ app.use(express.json());
 app.use("/auth", usersRouter);
 app.use("/recipes", recipesRouter);
 app.use("/ingredients", ingredientsRouter);
+
 // app.use("/own-recipes", ownRecipesRouter)
 app.use("/favorite", favoriteRouter);
 app.use("/shopping-list", shoppingListRouter);
-
+app.use("/aploadimage", require("./routes/api/auth"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {
