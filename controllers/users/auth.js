@@ -13,7 +13,7 @@ const register = async (rec, res) => {
   const user = await User.findOne({ email });
 
   if (user) {
-    throw HttpError(409, "this email already use");
+    throw HttpError(409, "This email already in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
   const verificationCode = uuid.v4();
@@ -22,7 +22,7 @@ const register = async (rec, res) => {
 
   const verifyEmail = {
     to: email,
-    subject: " Verify email",
+    subject: "Verify email",
     html: `<a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}" >Click to verify email</a>`,
   };
 
@@ -38,7 +38,7 @@ const verifyEmail = async (req, res) => {
   const { verificationCode } = req.params;
   const user = await User.findOne({ verificationCode });
   if (!user) {
-    throw HttpError(401, " email not found");
+    throw HttpError(401, "Email not found");
   }
 
   await User.findByIdAndUpdate(user._id, {
@@ -47,7 +47,7 @@ const verifyEmail = async (req, res) => {
   });
 
   res.json({
-    message: "Email verify SUCCESS",
+    message: "Email verify succsess",
   });
 };
 
@@ -55,22 +55,22 @@ const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(401, " Email not found");
+    throw HttpError(401, "Email not found");
   }
   if (user.verify) {
-    throw HttpError(401, "this emeail already verified");
+    throw HttpError(401, "Email already verified");
   }
 
   const verifyEmail = {
     to: email,
-    subject: " Verify email",
+    subject: "Verify email",
     html: `<a target="_blank" href="${BASE_URL}/auth/verify/${user.verificationCode}" >Click to verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
 
   res.json({
-    message: "verify email sent SUCCESS",
+    message: "Verify email sent success",
   });
 };
 
@@ -79,12 +79,12 @@ const login = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw HttpError(404, "emeail or password wrong or invalid");
+    throw HttpError(404, "Email or password wrong or invalid");
   }
 
   const comparePassword = bcrypt.compare(password, user.password);
   if (!comparePassword) {
-    throw HttpError(404, "emeail or password wrong or invalid");
+    throw HttpError(404, "Email or password wrong or invalid");
   }
 
   const payload = {
@@ -133,7 +133,7 @@ const logout = async (req, res) => {
   const { _id } = req.user;
   await User.findByIdAndUpdate(_id, { token: "" });
 
-  res.json("logout success");
+  res.json("Logout success");
 };
 
 module.exports = {
