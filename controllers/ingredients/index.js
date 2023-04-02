@@ -1,7 +1,7 @@
 const ingredientList = require("./ingredientList");
-const searchByIngredients = require("./searchByIngredients");
+const getRecipesByIngredient = require("./getRecipesByIngredient");
 
 module.exports = {
   ingredientList,
-  searchByIngredients,
+  getRecipesByIngredient,
 };
