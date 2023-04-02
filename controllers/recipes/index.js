@@ -3,6 +3,7 @@ const getCategories = require("./getCategories");
 const getRecipeById = require("./getRecipeById");
 const getPopularRecipes = require("./getPopularRecipes");
 const getMainPageRecipes = require("./getMainPageRecipes");
+const getRecipesByName = require("./getRecipesByName")
 
 
 module.exports = {
@@ -10,4 +11,5 @@ module.exports = {
   getRecipeById: ctrlWrapper(getRecipeById),
   getPopularRecipes: ctrlWrapper(getPopularRecipes),
   getMainPageRecipes: ctrlWrapper(getMainPageRecipes),
+  getRecipesByName: ctrlWrapper(getRecipesByName)
 };
