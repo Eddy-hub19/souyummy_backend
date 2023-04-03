@@ -42,10 +42,12 @@ const verifyEmail = async (req, res) => {
   if (!user) {
     throw HttpError(401, "Email not found");
   }
+  if (user.verify) {
+    throw HttpError(401, "Email already verified");
+  }
 
   await User.findByIdAndUpdate(user._id, {
     verify: true,
-    verificationCode: "",
   });
 
   res.json({
