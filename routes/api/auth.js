@@ -6,7 +6,7 @@ const { validateBody, authenticate, upload } = require("../../middlewares");
 
 const { schemas } = require("../../models/users");
 
-const { saveImages } = require("../../controllers/cloudinary");
+const { saveImages, updateAvatar } = require("../../controllers/cloudinary");
 
 const router = express.Router();
 
@@ -26,6 +26,8 @@ router.get("/current", authenticate, crtl.getCurrent);
 
 router.post("/logout", authenticate, crtl.logout);
 
-router.post("/", upload.single("file"), saveImages);
+router.post("/", authenticate, upload.single("file"), saveImages);
+
+router.patch("/", authenticate, upload.single("file"), updateAvatar);
 
 module.exports = router;

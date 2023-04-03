@@ -1,7 +1,9 @@
 const ctrlWrapper = require("../ctrlWrapper");
 const cloudinary = require("cloudinary").v2;
+
 const saveImages = async (req, res) => {
   const result = await cloudinary.uploader.upload(req.file.path);
+  console.log(req._id);
   res.json(result);
 };
 module.exports = { saveImages: ctrlWrapper(saveImages) };
