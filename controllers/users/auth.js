@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const { User } = require("../../models/users");
 const jwt = require("jsonwebtoken");
 const uuid = require("uuid");
+const gravatar = require("gravatar");
 
 const { controllersWraper, sendEmail } = require("../../helpers");
 const { HttpError } = require("../../routes/errors/HttpErrors");
@@ -16,9 +17,10 @@ const register = async (rec, res) => {
     throw HttpError(409, "This email already in use");
   }
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email);
   const verificationCode = uuid.v4();
 
-  const newUser = await User.create({ ...rec.body, password: hashPassword, verificationCode });
+  const newUser = await User.create({ ...rec.body, password: hashPassword, avatarURL, verificationCode });
 
   const verifyEmail = {
     to: email,

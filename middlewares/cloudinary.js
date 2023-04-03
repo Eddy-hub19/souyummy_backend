@@ -9,7 +9,7 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
   secure: true,
 });
-
+require("dotenv").config();
 // const storage = new CloudinaryStorage({
 //   cloudinary: cloudinary,
 //   folder: "avatars",
