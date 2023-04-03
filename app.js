@@ -29,7 +29,8 @@ app.use("/own-recipes", ownRecipesRouter);
 app.use("/shopping-list", shoppingListRouter);
 app.use("/favorite", favoriteRouter);
 app.use("/shopping-list", shoppingListRouter);
-app.use("/aploadimage", require("./routes/api/auth"));
+app.use("/add", require("./routes/api/auth"));
+app.use("/main-page", require("./routes/api/auth"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {
