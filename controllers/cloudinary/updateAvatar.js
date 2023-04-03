@@ -9,6 +9,6 @@ const updateAvatar = async (req, res) => {
   const updatedAvatarUrl = result.secure_url;
   console.log(updatedAvatarUrl);
   await User.findByIdAndUpdate(_id, { avatarURL: updatedAvatarUrl, name: name });
-  res.json(updatedAvatarUrl);
+  res.json({ updatedAvatarUrl, name });
 };
 module.exports = { updateAvatar: ctrlWrapper(updateAvatar) };
