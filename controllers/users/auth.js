@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 const uuid = require("uuid");
 const gravatar = require("gravatar");
 
-const { controllersWraper, sendEmail } = require("../../helpers");
+const ctrlWraper = require("../ctrlWrapper");
+const { sendEmail } = require("../../helpers");
 const { HttpError } = require("../../routes/errors/HttpErrors");
 
 const { SECRET_KEY, BASE_URL } = process.env;
@@ -142,11 +143,11 @@ const logout = async (req, res) => {
 };
 
 module.exports = {
-  register: controllersWraper(register),
-  verifyEmail: controllersWraper(verifyEmail),
-  resendVerifyEmail: controllersWraper(resendVerifyEmail),
-  login: controllersWraper(login),
-  getCurrent: controllersWraper(getCurrent),
-  logout: controllersWraper(logout),
-  subscribe: controllersWraper(subscribe),
+  register: ctrlWraper(register),
+  verifyEmail: ctrlWraper(verifyEmail),
+  resendVerifyEmail: ctrlWraper(resendVerifyEmail),
+  login: ctrlWraper(login),
+  getCurrent: ctrlWraper(getCurrent),
+  logout: ctrlWraper(logout),
+  subscribe: ctrlWraper(subscribe),
 };
