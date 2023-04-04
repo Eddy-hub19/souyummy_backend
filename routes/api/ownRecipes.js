@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const { ownRecipes } = require("../../controllers/index");
-const { authenticate, isValidId } = require("../../middlewares/index");
+const { ownRecipes } = require("../../controllers");
+const { authenticate, isValidId } = require("../../middlewares");
 
 // ============================================================================ //
 

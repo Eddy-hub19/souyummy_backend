@@ -1,5 +1,4 @@
-const { User } = require("../../models/users");
-const { Recipe } = require("../../models/recipes");
+const { User, Recipe } = require("../../models/index");
 
 const { HttpError } = require("../../routes/errors/HttpErrors");
 const getRecipeIngredients = require("../../utils/getIngredientsForRecipe");

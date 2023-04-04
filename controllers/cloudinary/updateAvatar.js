@@ -1,4 +1,3 @@
-const ctrlWrapper = require("../ctrlWrapper");
 const cloudinary = require("cloudinary").v2;
 const { User } = require("../../models");
 
@@ -10,4 +9,4 @@ const updateAvatar = async (req, res) => {
   await User.findByIdAndUpdate(_id, { avatarURL: updatedAvatarUrl, name: name });
   res.json({ updatedAvatarUrl, name });
 };
-module.exports = { updateAvatar: ctrlWrapper(updateAvatar) };
+module.exports = updateAvatar;

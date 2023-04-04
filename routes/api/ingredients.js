@@ -1,7 +1,7 @@
 const express = require("express");
 
 const auth = require("../../middlewares/auth");
-const { ingredientList, getRecipesByIngredient } = require("../../controllers/ingredients/");
+const { ingredientList, getRecipesByIngredient } = require("../../controllers/ingredients");
 
 const router = express.Router();
 

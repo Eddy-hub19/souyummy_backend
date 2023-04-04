@@ -1,5 +1,5 @@
-const { Recipe } = require("../../models/index");
-const { HttpError } = require("../../helpers/index");
+const { Recipe } = require("../../models");
+const { HttpError } = require("../../helpers");
 // ======================================================= //
 const removeRecipe = async (req, res, next) => {
   const result = await Recipe.findByIdAndDelete({ _id: req.params.recipeId });
