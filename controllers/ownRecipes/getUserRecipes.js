@@ -1,4 +1,4 @@
-const { Recipe } = require("../../models/index");
+const { Recipe } = require("../../models");
 
 // ======================================================= //
 const getUserRecipes = async (req, res, next) => {

@@ -1,4 +1,4 @@
-const { Recipe } = require("../../models/index");
+const { Recipe } = require("../../models");
 
 const getMainPageRecipes = async (req, res, next) => {
   const BreakfastRecipes = await Recipe.find({ category: "Breakfast" }, null, { limit: 4 });

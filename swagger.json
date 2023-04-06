@@ -11,9 +11,9 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-    "servers": [
+  "servers": [ 
     {
-      "url": "http://localhost:3000"
+      "url": "https://determined-ruby-nematode.cyclic.app"
     }
   ],
   "tags": [
@@ -40,6 +40,10 @@
     {
       "name": "Popular",
       "description": "Popular endpoints"
+    },
+    {
+      "name": "Search",
+      "description": "Search endpoints"
     },
     {
       "name": "Shopping-list",
@@ -80,7 +84,6 @@
             "content": {}
           }
         }
-
       }
     },
     "/auth/verify": {
@@ -305,7 +308,45 @@
         }
       }
     },
-    "/ownRecipes": {
+    "/search/{keyWord}": {
+        "get": {
+          "tags": ["Search"],
+        "summary": "Search recipe by query",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "keyWord",
+            "required": true,
+            "description": "Search query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchRecipeByQueryResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recipe is not found.",
+            "content": {}
+          }
+        }
+        }
+    },
+    "/own-recipes/{userId}": {
       "get": {
         "tags": ["Own recipes"],
         "summary": "Own recipes list",
@@ -314,10 +355,20 @@
             "Bearer": []
           }
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "description": "Users's id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Successful operation",
+            "description": "Successful",
             "content": {
               "application/json": {
                 "schema": {
@@ -327,7 +378,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/own-recipes/add": {
       "post": {
         "tags": ["Own recipes"],
         "summary": "Add own recipe",
@@ -339,6 +392,7 @@
         "parameters": [],
         "requestBody": {
           "description": "Add own recipe",
+          "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
@@ -358,9 +412,354 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          },
           "409": {
             "description": "Recipe is already exist",
             "content": {}
+          }
+        }
+      }
+    },
+    "/own-recipes/remove/{recipeId}": {
+      "delete": {
+        "tags": ["Own recipes"],
+        "summary": "Delete own recipe",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "recipeId",
+            "required": true,
+            "description": "Recipe id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Response message",
+                      "example": "Recipe deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/ingredients/list": {
+      "get": {
+        "tags": ["Ingredients"],
+        "summary": "Ingredients list",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IngredientsListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ingredients/{ingredientName}": {
+      "get": {
+        "tags": ["Ingredients"],
+        "summary": "Recipes list by ingredient",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ingredientName",
+            "required": true,
+            "description": "Ingredient name",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecipesByIngredientResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/favorite/add/{id}": {
+      "post": {
+        "tags": ["Favorite"],
+        "summary": "Add to favorite",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Meal id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Response message",
+                      "example": "Added to favorite"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/favorite/del/{id}": {
+      "post": {
+        "tags": ["Favorite"],
+        "summary": "Remove from favorites",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Meal id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Response message",
+                      "example": "Removed from favorite"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/favorite": {
+      "get": {
+        "tags": ["Favorite"],
+        "summary": "Favorite recipes list",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FavoriteListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shopping-list": {
+      "get": {
+        "tags": ["Shopping-list"],
+        "summary": "User's shopping list",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Shopping-list"],
+        "summary": "Add ingredient to user's shopping list",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [],
+        "requestBody": {
+          "description": "Ingredient name",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddToShoppingListRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Response message",
+                      "example": "Added to shopping list"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shopping-list/{id}": {
+      "delete": {
+        "tags": ["Shopping-list"],
+        "summary": "Remove ingredient from user's shopping list",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "Ingredient id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Response message",
+                      "example": "Ingredient removed from your shopping list"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -486,9 +885,6 @@
         "items": {
           "type": "object",
           "properties": {
-            "imgURL": {
-              "type": "string"
-            },
             "_id": {
               "type": "string",
               "example": "640cd5ac2d9fecf12e889863"
@@ -586,9 +982,6 @@
         "items": {
           "type": "object",
           "properties": {
-            "imgURL": {
-              "type": "string"
-            },
             "_id": {
               "type": "string",
               "example": "640cd5ac2d9fecf12e889863"
@@ -709,9 +1102,14 @@
               "Vegetarian"
             ]
           },
-          "about": {
+          "area": {
+            "type": "string",
+            "description": "Area's name",
+            "example": "Italian"
+          },
+          "instructions": {
             "type": "array",
-            "description": "Recipe's area",
+            "description": "Recipe's instruction",
             "items": {
               "type": "string",
               "example": "Preheat the oven to 150C/300F/Gas."
@@ -723,10 +1121,10 @@
           },
           "description": {
             "type": "string",
-            "description": "Recipe's instruction",
-            "example": "Preheat oven to 350° F. Spray a 9x13-inch baking pan with non-stick spray."
+            "description": "Recipe's description",
+            "example": "An Italian pasta dish made with spaghetti and a meat-based sauce."
           },
-          "imgURL": {
+          "thumb": {
             "type": "string",
             "description": "Recipe's image",
             "example": "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg"
@@ -736,75 +1134,62 @@
             "description": "Recipes cooking time",
             "example": "15 min"
           },
+          "popularity": {
+            "type": "number",
+            "example": 6
+          },
+          "favorites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "6412cb161688c90e5427aee2"
+            }
+          },
+          "likes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "6412cb161688c90e5427aee2"
+            }
+          },
           "ingredients": {
             "type": "array",
             "description": "Recipes ingredients list",
             "items": {
               "type": "object",
               "properties": {
-                "ingredient": {
+                "id": {
                   "type": "string",
-                  "description": "Ingredient's name",
-                  "example": "basil"
+                  "description": "Ingredient's id",
+                  "example": "640c2dd963a319ea671e372e"
                 },
-                "qty": {
+                "measure": {
                   "type": "string",
                   "description": "Ingredient's quantity",
                   "example": "6 leaves"
-                },
-                "imgURL": {
-                  "type": "string",
-                  "description": "Ingredient's image",
-                  "example": "https://www.themealdb.com/images/ingredients/basil-Small.png"
-                },
-                "description": {
-                  "type": "string",
-                  "description": "Ingredient's image",
-                  "example": "Basil, also called great basil, is a culinary herb of the family Lamiaceae (mints)."
-                },
-                "id": {
-                  "type": "string",
-                  "description": "Ingredient's image",
-                  "example": 17
                 }
               }
             },
             "example": [
               {
-                "ingredient": "basil",
-                "qty": "6 leaves",
-                "imgURL": "https://www.themealdb.com/images/ingredients/basil-Small.png",
-                "description": "Basil, also called great basil, is a culinary herb of the family Lamiaceae (mint).",
-                "id": 17
+                "id": "640c2dd963a319ea671e372e",
+                "measure": "2"
               },
               {
-                "ingredient": "Parmigiano-Reggiano",
-                "qty": "spinkling",
-                "imgURL": "https://www.themealdb.com/images/ingredients/Parmigiano-Reggiano-Small.png",
-                "description": null,
-                "id": 236
+                "id": "640c2dd963a319ea671e3776",
+                "measure": "4"
               }
             ]
           }
         }
       },
-      "AddOwnRecipeRequest": {
+      "SearchRecipeByQueryResponse": {
         "type": "object",
         "properties": {
-          "picture": {
-            "type": "string",
-            "description": "Recipe's image",
-            "format": "binary"
-          },
           "title": {
             "type": "string",
-            "description": "Recipe's title",
-            "example": ""
-          },
-          "about": {
-            "type": "string",
-            "description": "Recipe's about",
-            "example": ""
+            "description": "Recipe's name",
+            "example": "Brown Stew Chicken"
           },
           "category": {
             "type": "string",
@@ -826,10 +1211,389 @@
               "Vegetarian"
             ]
           },
-          "cookingTime": {
+          "area": {
+            "type": "string",
+            "description": "Area's name",
+            "example": "Italian"
+          },
+          "instructions": {
+            "type": "array",
+            "description": "Recipe's instruction",
+            "items": {
+              "type": "string",
+              "example": "Preheat the oven to 150C/300F/Gas."
+            },
+            "example": [
+              "Preheat the oven to 150C/300F/Gas.",
+              "Toss the beef and flour together in a bowl with some salt and black pepper."
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "Recipe's description",
+            "example": "An Italian pasta dish made with spaghetti and a meat-based sauce."
+          },
+          "thumb": {
+            "type": "string",
+            "description": "Recipe's image",
+            "example": "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg"
+          },
+          "time": {
+            "type": "string",
+            "description": "Recipes cooking time",
+            "example": "15 min"
+          },
+          "popularity": {
+            "type": "number",
+            "example": 6
+          },
+          "favorites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "6412cb161688c90e5427aee2"
+            }
+          },
+          "likes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "6412cb161688c90e5427aee2"
+            }
+          },
+          "ingredients": {
+            "type": "array",
+            "description": "Recipes ingredients list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Ingredient's id",
+                  "example": "640c2dd963a319ea671e372e"
+                },
+                "measure": {
+                  "type": "string",
+                  "description": "Ingredient's quantity",
+                  "example": "6 leaves"
+                }
+              }
+            },
+            "example": [
+              {
+                "id": "640c2dd963a319ea671e372e",
+                "measure": "2"
+              },
+              {
+                "id": "640c2dd963a319ea671e3776",
+                "measure": "4"
+              }
+            ]
+          }
+        }
+      },
+      "OwnRecipesResponse": {
+        "type": "array",
+        "description": "Own recipes list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "imgURL": {
+                  "type": "string",
+                  "description": "Recipe's URL",
+                  "format": "string"
+                },
+                "_id": {
+                  "type": "string",
+                  "description": "Recipe's id",
+                  "example": "640cd5ac2d9fecf12e889700"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Recipe's title",
+                  "example": "BBakewell tart"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "Recipe's category",
+                  "example": "Dessert"
+                },
+                "area": {
+                  "type": "string",
+                  "description": "Recipe's area",
+                  "example": "British"
+                },
+                "instructions": {
+                  "type": "string",
+                  "description": "Recipe's instructions",
+                  "example": "To make the pastry, measure the flour into a bowl ..."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Recipe's description",
+                  "example": "A British dessert consisting of a shortcrust pastry shell filled with raspberry jam, frangipane, and topped with almonds."
+                },
+                "thumb": {
+                  "type": "string",
+                  "description": "Recipe's image",
+                  "example": "https://www.themealdb.com/images/media/meals/wyrqqq1468233628.jpg"
+                },
+                "preview": {
+                  "type": "string",
+                  "description": "Recipe's image preview",
+                  "example": "https://www.themealdb.com/images/media/meals/wyrqqq1468233628.jpg"
+                },
+                "time": {
+                  "type": "string",
+                  "description": "Cooking time",
+                  "example": "50"
+                },
+                "popularity": {
+                  "type": "integer",
+                  "description": "Recipe popularity",
+                  "example": 5
+                },
+                "favorites": {
+                  "type": "array",
+                  "example": ["640e10b12752a54004e7b2bc", "6411fef75848f7534c62c591"]
+                },
+                "likes": {
+                  "type": "array",
+                  "example": ["640e10b12752a54004e7b2bc"]
+                },
+                "youtube": {
+                  "type": "string",
+                  "description": "Youtube link",
+                  "example": "https://www.youtube.com/watch?v=1ahpSTf_Pvk"
+                },
+                "ingredients": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "_id": "640c2dd963a319ea671e3743",
+                      "ttl": "Plain Flour",
+                      "desc": "A finely ground flour made from wheat that is often used as a basic ingredient in many recipes, including cakes, breads, and pastries.",
+                      "t": "",
+                      "thb": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564855/rgbrzmkgwzap28petbza.png"
+                    }
+                  ]
+                }
+              }
+            },
+            "example": [
+            {
+              "imgURL": "",
+              "_id": "640cd5ac2d9fecf12e8897f2",
+              "title": "Honey Teriyaki Salmon",
+              "category": "Seafood",
+              "area": "Japanese",
+              "instructions": "Mix all the ingredients in the Honey Teriyaki Glaze together. Whisk to blend well. Combine the salmon and the Glaze together.\r\n\r\nHeat up a skillet on medium-low heat. Add the oil, Pan-fry the salmon on both sides until it’s completely cooked inside and the glaze thickens.\r\n\r\nGarnish with sesame and serve immediately.",
+              "description": "A Japanese-inspired dish made with salmon fillets, teriyaki sauce, honey, and sesame seeds.",
+              "thumb": "https://www.themealdb.com/images/media/meals/xxyupu1468262513.jpg",
+              "preview": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560401/yspi0frormix0zwglhos.jpg",
+              "time": "25",
+              "popularity": 0,
+              "favorites": [],
+              "likes": [],
+              "youtube": "https://www.youtube.com/watch?v=4MpYuaJsvRw",
+              "tags": ["Fish", "Breakfast", "DateNight"],
+              "createdAt": "2023-03-11T19:25:33.240Z",
+              "updatedAt": "2023-03-22T11:58:16.672Z",
+              "ingredients": [
+                {
+                  "id": "640c2dd963a319ea671e365c",
+                  "measure": "1 lb"
+                },
+                {
+                  "id": "640c2dd963a319ea671e372c",
+                  "measure": "1 tablespoon"
+                },
+                {
+                  "id": "640c2dd963a319ea671e376c",
+                  "measure": "2 tablespoons"
+                },
+                {
+                  "id": "640c2dd963a319ea671e375c",
+                  "measure": "2 tablespoons"
+                },
+                {
+                  "id": "640c2dd963a319ea671e3764",
+                  "measure": "4 tablespoons"
+                }
+              ]
+            }
+            ]
+      },
+      "AddOwnRecipeRequest": {
+        "required": ["title", "category", "area", "instructions", "description", "thumb", "preview", "time"],
+        "type": "object",
+        "properties": {
+          "imgURL": {
+            "type": "string",
+            "description": "Recipe's image",
+            "format": "binary"
+          },
+          "title": {
+            "type": "string",
+            "description": "Recipe's title",
+            "required": true,
+            "default": ""
+          },
+          "category": {
+            "type": "string",
+            "description": "Recipe's related category",
+            "required": true,
+            "default": "",
+            "enum": [
+              "Beef",
+              "Breakfast",
+              "Chicken",
+              "Dessert",
+              "Goat",
+              "Lamb",
+              "Miscellaneous",
+              "Pasta",
+              "Pork",
+              "Seafood",
+              "Side",
+              "Starter",
+              "Vegan",
+              "Vegetarian"
+            ]
+          },
+          "area": {
+            "type": "string",
+            "description": "Recipe's area",
+            "required": true,
+            "default": ""
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Recipe's instruction",
+            "example": "Preheat the oven to 150C/300F/Gas."
+          },
+          "description": {
+            "type": "string",
+            "description": "Recipe's description",
+            "required": true,
+            "default": ""
+          },
+          "thumb": {
+            "type": "string",
+            "description": "Thumb image",
+            "required": true,
+            "format": "binary"
+          },
+          "preview": {
+            "type": "string",
+            "description": "Preview image",
+            "required": true,
+            "format": "binary"
+          },
+          "time": {
+            "type": "string",
+            "description": "Cooking time",
+            "required": true,
+            "default": ""
+          },
+          "youtube": {
+            "type": "string",
+            "description": "YouTube link",
+            "default": ""
+          },
+          "ingredients": {
+            "type": "array",
+            "description": "Recipe's ingredients list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "ttl": {
+                  "type": "string",
+                  "description": "Ingredient name",
+                  "enum": [
+                    "Chicken",
+                    "Salmon",
+                    "Beef",
+                    "Apple Cider Vinegar",
+                    "Asparagus",
+                    "Aubergine",
+                    "Baby Plum Tomatoes",
+                    "Bacon",
+                    "Baking Powder",
+                    "Balsamic Vinegar",
+                    "Basil",
+                    "Basil Leaves",
+                    "Basmati Rice",
+                    "Bay Leaf",
+                    "Beef Brisket",
+                    "Beef Fillet",
+                    "Beef Gravy",
+                    "Avocado",
+                    "Pork"
+                  ]
+                },
+                "measure": {
+                  "type": "string",
+                  "description": "Ingredient quantity",
+                  "example": "2000 tsp"
+                }
+              }
+            }
+          }
+        }
+      },
+      "AddOwnRecipeResponse": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Recipe's id",
+            "example": "640c84b78097084bc02b85ae"
+          },
+          "thumb": {
+            "type": "string",
+            "description": "Recipe's image",
+            "example": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560403/smb2tdq5ltv4usbnvmt2.jpg"
+          },
+          "title": {
+            "type": "string",
+            "description": "Recipe's name",
+            "example": "Chicken Enchilada Casserole"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category name",
+            "enum": [
+              "Beef",
+              "Breakfast",
+              "Chicken",
+              "Dessert",
+              "Goat",
+              "Lamb",
+              "Miscellaneous",
+              "Pasta",
+              "Pork",
+              "Seafood",
+              "Side",
+              "Starter",
+              "Vegan",
+              "Vegetarian"
+            ]
+          },
+          "area": {
+            "type": "string",
+            "description": "Area's name",
+            "example": "Italian"
+          },
+          "time": {
             "type": "string",
             "description": "Recipe's cooking time",
-            "example": "20 min"
+            "example": "60 min"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Recipe's owner id",
+            "example": "6429d3bcf2d5352291b59e1c"
           },
           "ingredients": {
             "type": "array",
@@ -839,182 +1603,387 @@
               "properties": {
                 "ingredient": {
                   "type": "string",
-                  "description": "Ingredient name",
-                  "example": "Apple"
+                  "description": "Ingredient id",
+                  "example": "640c2dd963a319ea671e36cb"
                 },
-                "qty": {
+                "measure": {
                   "type": "string",
                   "description": "Ingredient quantity",
-                  "example": "2000 tsp"
+                  "example": "3 Cups"
+                }
+              }
+            }
+          },
+          "description": {
+            "type": "string",
+            "description": "Recipe's description",
+            "example": "A Mexican-inspired casserole made with shredded chicken, enchilada sauce, tortillas, and cheese."
+          }
+        }
+      },
+      "IngredientsListResponse": {
+        "type": "object",
+        "properties": {
+          "ingredients": {
+            "type": "array",
+            "description": "Ingredients",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "description": "Ingredient id",
+                  "example": "640c2dd963a319ea671e365c"
+                },
+                "ttl": {
+                  "type": "string",
+                  "description": "Ingredient title",
+                  "example": "Salmon"
+                },
+                "desc": {
+                  "type": "string",
+                  "description": "Ingredient description",
+                  "example": "Salmon is the common name for several species of ray-finned fish."
+                },
+                "t": {
+                  "type": "string",
+                  "example": ""
+                },
+                "thb": {
+                  "type": "string",
+                  "description": "Ingredient image",
+                  "example": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564123/rw8pn354…"
                 }
               }
             },
             "example": [
               {
-                "ingredient": "Apple",
-                "qty": "2000 tsp"
+                "_id": "640c2dd963a319ea671e365c",
+                "ttl": "Salmon",
+                "desc": "Salmon is the common name for several species of ray-finned fish in the family Salmonidae.",
+                "t": "",
+                "thb": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564123/bwzvxyjxozyankmd6ky8.png"
               },
               {
-                "ingredient": "Sugar",
-                "qty": "300 g"
+                "_id": "765c2dd963a319ea671e365c",
+                "ttl": "Chicken",
+                "desc": "The chicken is a type of domesticated fowl.",
+                "t": "",
+                "thb": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564123/rw8pn3541bmukb8d3mio.png"
               }
             ]
-          },
-          "description": {
-            "type": "string",
-            "description": "Recipe's description",
-            "example": "Recipe's description"
           }
         }
       },
-      "AddOwnRecipeResponse": {
-        "type": "object",
+      "RecipesByIngredientResponse": {
+        "type": "array",
+        "description": "Favorite recipes",
+        "items": {
+          "type": "object",
           "properties": {
+            "imgURL": {
+              "type": "string",
+              "description": "Recipe's URL",
+              "format": "string"
+            },
             "_id": {
               "type": "string",
               "description": "Recipe's id",
-              "example": "640c84b78097084bc02b85ae"
-            },
-            "imgURL": {
-              "type": "string",
-              "description": "Recipe's image",
-              "example": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560403/smb2tdq5ltv4usbnvmt2.jpg"
+              "example": "640cd5ac2d9fecf12e889700"
             },
             "title": {
               "type": "string",
-              "description": "Recipe's name",
-              "example": "Chicken Enchilada Casserole"
+              "description": "Recipe's title",
+              "example": "BBakewell tart"
             },
             "category": {
               "type": "string",
-              "description": "Category name",
-              "enum": [
-                "Beef",
-                "Breakfast",
-                "Chicken",
-                "Dessert",
-                "Goat",
-                "Lamb",
-                "Miscellaneous",
-                "Pasta",
-                "Pork",
-                "Seafood",
-                "Side",
-                "Starter",
-                "Vegan",
-                "Vegetarian"
-              ]
+              "description": "Recipe's category",
+              "example": "Dessert"
             },
-            "time": {
+            "area": {
               "type": "string",
-              "description": "Recipe's cooking time",
-              "example": "60 min"
+              "description": "Recipe's area",
+              "example": "British"
             },
-            "owner": {
+            "instructions": {
               "type": "string",
-              "description": "Recipe's owner id",
-              "example": "6429d3bcf2d5352291b59e1c"
-            },
-            "ingredients": {
-              "type": "array",
-              "description": "Recipe's ingredients list",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "ingredient": {
-                    "type": "string",
-                    "description": "Ingredient id",
-                    "example": "640c2dd963a319ea671e36cb"
-                  },
-                  "qty": {
-                    "type": "string",
-                    "description": "Ingredient quantity",
-                    "example": "3 Cups"
-                  }
-                }
-              }
+              "description": "Recipe's instructions",
+              "example": "To make the pastry, measure the flour into a bowl ..."
             },
             "description": {
               "type": "string",
               "description": "Recipe's description",
-              "example": "A Mexican-inspired casserole made with shredded chicken, enchilada sauce, tortillas, and cheese."
+              "example": "A British dessert consisting of a shortcrust pastry shell filled with raspberry jam, frangipane, and topped with almonds."
+            },
+            "thumb": {
+              "type": "string",
+              "description": "Recipe's image",
+              "example": "https://www.themealdb.com/images/media/meals/wyrqqq1468233628.jpg"
+            },
+            "preview": {
+              "type": "string",
+              "description": "Recipe's image preview",
+              "example": "https://www.themealdb.com/images/media/meals/wyrqqq1468233628.jpg"
+            },
+            "time": {
+              "type": "string",
+              "description": "Cooking time",
+              "example": "50"
+            },
+            "popularity": {
+              "type": "integer",
+              "description": "Recipe popularity",
+              "example": 5
+            },
+            "favorites": {
+              "type": "array",
+              "example": ["640e10b12752a54004e7b2bc", "6411fef75848f7534c62c591"]
+            },
+            "likes": {
+              "type": "array",
+              "example": ["640e10b12752a54004e7b2bc"]
+            },
+            "youtube": {
+              "type": "string",
+              "description": "Youtube link",
+              "example": "https://www.youtube.com/watch?v=1ahpSTf_Pvk"
+            },
+            "ingredients": {
+              "type": "array",
+              "example": [
+                {
+                  "_id": "640c2dd963a319ea671e3743",
+                  "ttl": "Plain Flour",
+                  "desc": "A finely ground flour made from wheat that is often used as a basic ingredient in many recipes, including cakes, breads, and pastries.",
+                  "t": "",
+                  "thb": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564855/rgbrzmkgwzap28petbza.png"
+                }
+              ]
             }
+          },
+          "example": [
+            {
+              "imgURL": "",
+              "_id": "640cd5ac2d9fecf12e8897f2",
+              "title": "Honey Teriyaki Salmon",
+              "category": "Seafood",
+              "area": "Japanese",
+              "instructions": "Mix all the ingredients in the Honey Teriyaki Glaze together. Whisk to blend well. Combine the salmon and the Glaze together.\r\n\r\nHeat up a skillet on medium-low heat. Add the oil, Pan-fry the salmon on both sides until it’s completely cooked inside and the glaze thickens.\r\n\r\nGarnish with sesame and serve immediately.",
+              "description": "A Japanese-inspired dish made with salmon fillets, teriyaki sauce, honey, and sesame seeds.",
+              "thumb": "https://www.themealdb.com/images/media/meals/xxyupu1468262513.jpg",
+              "preview": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560401/yspi0frormix0zwglhos.jpg",
+              "time": "25",
+              "popularity": 0,
+              "favorites": [],
+              "likes": [],
+              "youtube": "https://www.youtube.com/watch?v=4MpYuaJsvRw",
+              "tags": ["Fish", "Breakfast", "DateNight"],
+              "createdAt": "2023-03-11T19:25:33.240Z",
+              "updatedAt": "2023-03-22T11:58:16.672Z",
+              "ingredients": [
+                {
+                  "id": "640c2dd963a319ea671e365c",
+                  "measure": "1 lb"
+                },
+                {
+                  "id": "640c2dd963a319ea671e372c",
+                  "measure": "1 tablespoon"
+                },
+                {
+                  "id": "640c2dd963a319ea671e376c",
+                  "measure": "2 tablespoons"
+                },
+                {
+                  "id": "640c2dd963a319ea671e375c",
+                  "measure": "2 tablespoons"
+                },
+                {
+                  "id": "640c2dd963a319ea671e3764",
+                  "measure": "4 tablespoons"
+                }
+              ]
+            }
+          ]
         }
       },
-      "OwnRecipesResponse": {
+      "FavoriteListResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Response status",
+            "example": "Succes, we have found 2 position(s)"
+          },
+          "code": {
+            "type": "string",
+            "description": "Response code",
+            "example": "201"
+          },
+          "result": {
+            "type": "array",
+            "description": "Favorite recipes",
+            "items": {
+              "type": "object",
+              "properties": {
+                "imgURL": {
+                  "type": "string",
+                  "description": "Recipe's URL",
+                  "format": "string"
+                },
+                "_id": {
+                  "type": "string",
+                  "description": "Recipe's id",
+                  "example": "640cd5ac2d9fecf12e889700"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Recipe's title",
+                  "example": "BBakewell tart"
+                },
+                "category": {
+                  "type": "string",
+                  "description": "Recipe's category",
+                  "example": "Dessert"
+                },
+                "area": {
+                  "type": "string",
+                  "description": "Recipe's area",
+                  "example": "British"
+                },
+                "instructions": {
+                  "type": "string",
+                  "description": "Recipe's instructions",
+                  "example": "To make the pastry, measure the flour into a bowl ..."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Recipe's description",
+                  "example": "A British dessert consisting of a shortcrust pastry shell filled with raspberry jam, frangipane, and topped with almonds."
+                },
+                "thumb": {
+                  "type": "string",
+                  "description": "Recipe's image",
+                  "example": "https://www.themealdb.com/images/media/meals/wyrqqq1468233628.jpg"
+                },
+                "preview": {
+                  "type": "string",
+                  "description": "Recipe's image preview",
+                  "example": "https://www.themealdb.com/images/media/meals/wyrqqq1468233628.jpg"
+                },
+                "time": {
+                  "type": "string",
+                  "description": "Cooking time",
+                  "example": "50"
+                },
+                "popularity": {
+                  "type": "integer",
+                  "description": "Recipe popularity",
+                  "example": 5
+                },
+                "favorites": {
+                  "type": "array",
+                  "example": ["640e10b12752a54004e7b2bc", "6411fef75848f7534c62c591"]
+                },
+                "likes": {
+                  "type": "array",
+                  "example": ["640e10b12752a54004e7b2bc"]
+                },
+                "youtube": {
+                  "type": "string",
+                  "description": "Youtube link",
+                  "example": "https://www.youtube.com/watch?v=1ahpSTf_Pvk"
+                },
+                "ingredients": {
+                  "type": "array",
+                  "example": [
+                    {
+                      "_id": "640c2dd963a319ea671e3743",
+                      "ttl": "Plain Flour",
+                      "desc": "A finely ground flour made from wheat that is often used as a basic ingredient in many recipes, including cakes, breads, and pastries.",
+                      "t": "",
+                      "thb": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564855/rgbrzmkgwzap28petbza.png"
+                    }
+                  ]
+                }
+              }
+            },
+            "example": [
+            {
+              "imgURL": "",
+              "_id": "640cd5ac2d9fecf12e8897f2",
+              "title": "Honey Teriyaki Salmon",
+              "category": "Seafood",
+              "area": "Japanese",
+              "instructions": "Mix all the ingredients in the Honey Teriyaki Glaze together. Whisk to blend well. Combine the salmon and the Glaze together.\r\n\r\nHeat up a skillet on medium-low heat. Add the oil, Pan-fry the salmon on both sides until it’s completely cooked inside and the glaze thickens.\r\n\r\nGarnish with sesame and serve immediately.",
+              "description": "A Japanese-inspired dish made with salmon fillets, teriyaki sauce, honey, and sesame seeds.",
+              "thumb": "https://www.themealdb.com/images/media/meals/xxyupu1468262513.jpg",
+              "preview": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560401/yspi0frormix0zwglhos.jpg",
+              "time": "25",
+              "popularity": 0,
+              "favorites": [],
+              "likes": [],
+              "youtube": "https://www.youtube.com/watch?v=4MpYuaJsvRw",
+              "tags": ["Fish", "Breakfast", "DateNight"],
+              "createdAt": "2023-03-11T19:25:33.240Z",
+              "updatedAt": "2023-03-22T11:58:16.672Z",
+              "ingredients": [
+                {
+                  "id": "640c2dd963a319ea671e365c",
+                  "measure": "1 lb"
+                },
+                {
+                  "id": "640c2dd963a319ea671e372c",
+                  "measure": "1 tablespoon"
+                },
+                {
+                  "id": "640c2dd963a319ea671e376c",
+                  "measure": "2 tablespoons"
+                },
+                {
+                  "id": "640c2dd963a319ea671e375c",
+                  "measure": "2 tablespoons"
+                },
+                {
+                  "id": "640c2dd963a319ea671e3764",
+                  "measure": "4 tablespoons"
+                }
+              ]
+            }
+          ]
+          }
+        }
+      },
+      "ShoppingListResponse": {
         "type": "array",
-        "description": "Own recipes list",
+        "description": "Shopping list",
         "items": {
           "type": "object",
           "properties": {
             "_id": {
               "type": "string",
-              "description": "Recipe's id",
-              "example": "640c84b78097084bc02b85ae"
+              "description": "User's id",
+              "example": "640c84b78097888bc02b85ae"
             },
-            "imgURL": {
+            "nameIngredient": {
               "type": "string",
-              "description": "Recipe's image",
-              "example": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560403/smb2tdq5ltv4usbnvmt2.jpg"
+              "description": "Ingredient name",
+              "example": "Corn"
             },
-            "title": {
+            "weight": {
               "type": "string",
-              "description": "Recipe's name",
-              "example": "Chicken Enchilada Casserole"
+              "description": "Ingredient quantity",
+              "example": "400"
             },
-            "category": {
+            "image": {
               "type": "string",
-              "description": "Category name",
-              "enum": [
-                "Beef",
-                "Breakfast",
-                "Chicken",
-                "Dessert",
-                "Goat",
-                "Lamb",
-                "Miscellaneous",
-                "Pasta",
-                "Pork",
-                "Seafood",
-                "Side",
-                "Starter",
-                "Vegan",
-                "Vegetarian"
-              ]
+              "description": "Ingredient image",
+              "example": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678564123/rw8pn3541bmukb8d3mio.png"
             },
-            "time": {
+            "recipeId": {
               "type": "string",
-              "description": "Recipe's cooking time",
-              "example": "60 min"
-            },
-            "ingredients": {
-              "type": "array",
-              "description": "Recipe's ingredients list",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "ingredient": {
-                    "type": "string",
-                    "description": "Ingredient id",
-                    "example": "640c2dd963a319ea671e36cb"
-                  },
-                  "qty": {
-                    "type": "string",
-                    "description": "Ingredient quantity",
-                    "example": "3 Cups"
-                  }
-                }
-              }
-            },
-            "description": {
-              "type": "string",
-              "description": "Recipe's description",
-              "example": "A Mexican-inspired casserole made with shredded chicken, enchilada sauce, tortillas, and cheese."
-            },
-            "owner": {
-              "type": "string",
-              "description": "Recipe's owner id",
-              "example": "6429d3bcf2d5352291b59e1c"
+              "description": "Recipe id",
+              "example": "640cd5ac2d9fecf12e8897fc"
             }
           }
         }

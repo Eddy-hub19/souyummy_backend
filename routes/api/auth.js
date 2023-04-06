@@ -26,8 +26,8 @@ router.get("/current", authenticate, crtl.getCurrent);
 
 router.post("/logout", authenticate, crtl.logout);
 
-router.post("/", authenticate, upload.single("file"), saveImages);
+router.post("/picture", authenticate, upload.single("file"), saveImages);
 
-router.patch("/", authenticate, upload.single("file"), updateAvatar);
+router.patch("/avatar", authenticate, upload.single("file"), updateAvatar);
 
 module.exports = router;

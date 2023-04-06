@@ -1,5 +1,5 @@
-const { Ingredient, Recipe } = require("../../models/index");
-const { firstCapitalLetter } = require("../../helpers/index");
+const { Ingredient, Recipe } = require("../../models");
+const { firstCapitalLetter } = require("../../helpers");
 
 const getRecipesByIngredient = async (req, res) => {
   // const ingredientName = req.query.ttl;
