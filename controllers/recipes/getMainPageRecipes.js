@@ -9,12 +9,12 @@ const getMainPageRecipes = async (req, res, next) => {
 
   const DessertsRecipes = await Recipe.find({ category: "Dessert" }, null, { limit: 4 });
 
-  const mainPageRecipes = [
-    { breakfast: BreakfastRecipes }, // [ { [ {},{},{},{} ] } ]
-    { miscellaneous: MiscellaneousRecipes },
-    { chicken: ChikenRecipes },
-    { desserts: DessertsRecipes },
-  ];
+  const mainPageRecipes = {
+    breakfast: BreakfastRecipes, //  {  {[]},{[]},{[]},{[]}  }
+    miscellaneous: MiscellaneousRecipes,
+    chicken: ChikenRecipes,
+    desserts: DessertsRecipes,
+  };
 
   res.status(200).json(mainPageRecipes);
 };
