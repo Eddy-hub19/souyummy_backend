@@ -11,7 +11,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [
+  "servers": [ 
     {
       "url": "https://determined-ruby-nematode.cyclic.app"
     }
@@ -40,6 +40,10 @@
     {
       "name": "Popular",
       "description": "Popular endpoints"
+    },
+    {
+      "name": "Search",
+      "description": "Search endpoints"
     },
     {
       "name": "Shopping-list",
@@ -303,6 +307,44 @@
           }
         }
       }
+    },
+    "/search/{keyWord}": {
+        "get": {
+          "tags": ["Search"],
+        "summary": "Search recipe by query",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "keyWord",
+            "required": true,
+            "description": "Search query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchRecipeByQueryResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Recipe is not found.",
+            "content": {}
+          }
+        }
+        }
     },
     "/own-recipes/{userId}": {
       "get": {
@@ -1033,6 +1075,115 @@
         }
       },
       "RecipeByIdResponse": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Recipe's name",
+            "example": "Brown Stew Chicken"
+          },
+          "category": {
+            "type": "string",
+            "description": "Category name",
+            "enum": [
+              "Beef",
+              "Breakfast",
+              "Chicken",
+              "Dessert",
+              "Goat",
+              "Lamb",
+              "Miscellaneous",
+              "Pasta",
+              "Pork",
+              "Seafood",
+              "Side",
+              "Starter",
+              "Vegan",
+              "Vegetarian"
+            ]
+          },
+          "area": {
+            "type": "string",
+            "description": "Area's name",
+            "example": "Italian"
+          },
+          "instructions": {
+            "type": "array",
+            "description": "Recipe's instruction",
+            "items": {
+              "type": "string",
+              "example": "Preheat the oven to 150C/300F/Gas."
+            },
+            "example": [
+              "Preheat the oven to 150C/300F/Gas.",
+              "Toss the beef and flour together in a bowl with some salt and black pepper."
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "Recipe's description",
+            "example": "An Italian pasta dish made with spaghetti and a meat-based sauce."
+          },
+          "thumb": {
+            "type": "string",
+            "description": "Recipe's image",
+            "example": "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg"
+          },
+          "time": {
+            "type": "string",
+            "description": "Recipes cooking time",
+            "example": "15 min"
+          },
+          "popularity": {
+            "type": "number",
+            "example": 6
+          },
+          "favorites": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "6412cb161688c90e5427aee2"
+            }
+          },
+          "likes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "6412cb161688c90e5427aee2"
+            }
+          },
+          "ingredients": {
+            "type": "array",
+            "description": "Recipes ingredients list",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Ingredient's id",
+                  "example": "640c2dd963a319ea671e372e"
+                },
+                "measure": {
+                  "type": "string",
+                  "description": "Ingredient's quantity",
+                  "example": "6 leaves"
+                }
+              }
+            },
+            "example": [
+              {
+                "id": "640c2dd963a319ea671e372e",
+                "measure": "2"
+              },
+              {
+                "id": "640c2dd963a319ea671e3776",
+                "measure": "4"
+              }
+            ]
+          }
+        }
+      },
+      "SearchRecipeByQueryResponse": {
         "type": "object",
         "properties": {
           "title": {
