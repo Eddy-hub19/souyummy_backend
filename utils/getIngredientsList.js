@@ -5,7 +5,7 @@ const HttpError = require("../routes/errors/HttpErrors");
 const getIngredientsList = async (token) => {
   const res = await fetch(`${BASE_URL}/ingredients/list`, {
     headers: {
-      Authorization: `${token}`,
+      Authorization: `Bearer ${token}`,
     },
   });
   const data = await res.json();
