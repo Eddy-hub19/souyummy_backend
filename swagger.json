@@ -1585,6 +1585,18 @@
               "Vegetarian"
             ]
           },
+          "instructions": {
+            "type": "array",
+            "description": "Recipe's instruction",
+            "items": {
+              "type": "string",
+              "example": "Preheat the oven to 150C/300F/Gas."
+            },
+            "example": [
+              "Preheat the oven to 150C/300F/Gas.",
+              "Toss the beef and flour together in a bowl with some salt and black pepper."
+            ]
+          },
           "area": {
             "type": "string",
             "description": "Area's name",
