@@ -1555,6 +1555,11 @@
             "description": "Recipe's image",
             "example": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560403/smb2tdq5ltv4usbnvmt2.jpg"
           },
+          "prewiew": {
+            "type": "string",
+            "description": "Recipe's preview",
+            "example": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560403/smb2tdq5ltv4usbnvmt2.jpg"
+          },
           "title": {
             "type": "string",
             "description": "Recipe's name",
