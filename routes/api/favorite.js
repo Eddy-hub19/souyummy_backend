@@ -6,7 +6,7 @@ const { authenticate } = require("../../middlewares");
 
 const router = express.Router();
 router.get("/", authenticate, ctrl.getFavorites);
-router.post("/add/:id", authenticate, ctrl.addFavorite);
+router.patch("/add/:id", authenticate, ctrl.addFavorite);
 router.delete("/del/:id", authenticate, ctrl.deleteFavorite);
 
 module.exports = router;
