@@ -5,6 +5,12 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 require("dotenv").config();
 
+const corsOptions = {
+  origin: ["http://localhost:3000"],
+  optionsSuccessStatus: 200,
+  allowedHeaders: ["Content-Type", "Authorization", "Access-Control-Allow-Headers"],
+};
+
 // const mainRouter = require("./routes/api/main");
 const usersRouter = require("./routes/api/auth");
 const ingredientsRouter = require("./routes/api/ingredients");
@@ -20,7 +26,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-
+app.use(cors(corsOptions));
 // app.use("/", mainRouter);
 app.use("/auth", usersRouter);
 app.use("/recipes", recipesRouter);
