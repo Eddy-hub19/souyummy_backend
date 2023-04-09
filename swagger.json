@@ -537,7 +537,7 @@
       }
     },
     "/favorite/add/{id}": {
-      "post": {
+      "put": {
         "tags": ["Favorite"],
         "summary": "Add to favorite",
         "security": [
@@ -582,7 +582,7 @@
       }
     },
     "/favorite/del/{id}": {
-      "post": {
+      "delete": {
         "tags": ["Favorite"],
         "summary": "Remove from favorites",
         "security": [
