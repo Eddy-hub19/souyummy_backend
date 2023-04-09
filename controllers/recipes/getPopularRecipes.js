@@ -6,14 +6,14 @@ const getRecipeIngredients = require("../../utils/getIngredientsForRecipe");
 const getPopularRecipes = async (req, res) => {
   const { authorization = "" } = req.headers;
   const filter = {};
-  const allRecipes = await Recipe.find(filter).sort("-popularity");
+  const allRecipes = await Recipe.find(filter).sort("-popularity").limit(10);
 
   if (!allRecipes) {
     throw HttpError(404, `Unfortunately there are no popular recipes at the moment`);
   }
 
   const result = await Promise.all(
-    allRecipes.slice(0, 10).map(async (r) => {
+    allRecipes.map(async (r) => {
       return {
         imgURL: r.imgURL,
         _id: r._id,
@@ -37,7 +37,7 @@ const getPopularRecipes = async (req, res) => {
     })
   );
   res.status(201).json({
-    status: `succes, we have found ${allRecipes.length} position(s)`,
+    status: `succes, here is ${allRecipes.length} position(s)`,
     code: 201,
     result: result,
   });
