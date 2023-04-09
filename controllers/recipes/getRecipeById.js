@@ -31,7 +31,7 @@ const getRecipeById = async (req, res) => {
     tags: recepipe.tags,
     createdAt: recepipe.createdAt,
     updatedAt: recepipe.updatedAt,
-    ingredients: await getRecipeIngredients(recepipe.ingredients, authorization),
+    ingredients: [...(await getRecipeIngredients(recepipe.ingredients, authorization))],
   };
 
   res.json(result);

@@ -5,7 +5,7 @@ const getRecipeIngredients = async (recipeIngredients, token) => {
 
   return recipeIngredients.reduce((acc, currentIngredient, index) => {
     const data = allIngredientList.filter((ingredient) => ingredient._id === currentIngredient.id.valueOf());
-    return [...acc, ...data];
+    return [...acc, { ...recipeIngredients[index], ...data[0] }];
   }, []);
 };
 
