@@ -84,26 +84,26 @@ const resendVerifyEmail = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
+  const prevUser = await User.findOne({ email });
 
-  if (!user) {
+  if (!prevUser) {
     throw HttpError(404, "Email or password wrong or invalid");
   }
 
-  const comparePassword = bcrypt.compare(password, user.password);
+  const comparePassword = bcrypt.compare(password, prevUser.password);
   if (!comparePassword) {
     throw HttpError(404, "Email or password wrong or invalid");
   }
 
   const payload = {
-    id: user._id,
+    id: prevUser._id,
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "70h" });
-  await User.findByIdAndUpdate(user._id, { token });
-  const updatedUser = await User.findOne({ token });
+  await User.findByIdAndUpdate(prevUser._id, { token });
+  const user = await User.findOne({ token });
   res.json({
-    updatedUser,
+    user,
     token,
   });
 };
