@@ -131,11 +131,11 @@ const subscribe = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email, name } = req.user;
+  // const { email, name } = req.user;
+  const user = req.user;
   console.log(req.user);
   res.json({
-   email,
-    name,
+    user,
   });
 };
 
