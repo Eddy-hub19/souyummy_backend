@@ -134,9 +134,7 @@ const getCurrent = async (req, res) => {
   // const { email, name } = req.user;
   const user = req.user;
   console.log(req.user);
-  res.json({
-    user,
-  });
+  res.json(user);
 };
 
 const logout = async (req, res) => {
