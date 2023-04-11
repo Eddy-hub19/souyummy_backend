@@ -22,22 +22,19 @@ const register = async (rec, res) => {
   const verificationCode = uuid.v4();
 
   const newUser = await User.create({ ...rec.body, password: hashPassword, avatarURL, verificationCode });
-  // == закоментовано длятого щоб при тестах не відсилало еммайли == //
-  // const verifyEmail = {
-  //   to: email,
-  //   subject: "Verify email",
-  //   html: `<a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}" >Click to verify email</a>`,
-  // };
-  // commented temporary for not sending emails during tests
-  // await sendEmail(verifyEmail);
-  // == ========================================================================= == //
-
-  const payload = {
-    id: newUser._id,
+  const verifyEmail = {
+    to: email,
+    subject: "Verify email",
+    html: `<a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}" >Click to verify email</a>`,
   };
+  await sendEmail(verifyEmail);
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "70h" });
-  res.status(201).json({ newUser, token });
+  // const payload = {
+  //   id: newUser._id,
+  // };
+
+  // const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "70h" });
+  res.status(201).json(newUser);
 };
 
 const verifyEmail = async (req, res) => {
@@ -90,7 +87,7 @@ const login = async (req, res) => {
     throw HttpError(404, "Email or password wrong or invalid");
   }
 
-  const comparePassword = bcrypt.compare(password, prevUser.password);
+  const comparePassword = await bcrypt.compare(password, prevUser.password);
   if (!comparePassword) {
     throw HttpError(404, "Email or password wrong or invalid");
   }
@@ -131,7 +128,6 @@ const subscribe = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  // const { email, name } = req.user;
   const user = req.user;
   console.log(req.user);
   res.json(user);
