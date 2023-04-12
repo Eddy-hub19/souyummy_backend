@@ -1,23 +1,16 @@
-const { User, Recipe } = require("../../models/index");
+const { Recipe } = require("../../models/index");
 
 const { HttpError } = require("../../routes/errors/HttpErrors");
 const getRecipeIngredients = require("../../utils/getIngredientsForRecipe");
 
 const getFavorites = async (req, res) => {
-  const { authorization = "" } = req.headers;
-  const { _id } = req.user;
+  const { favorite, name } = req.user;
 
-  const user = await User.findOne({ _id: _id });
-
-  if (!user) {
-    throw HttpError(401, "Unauthorized");
+  if (favorite.length <= 0) {
+    throw HttpError(404, `User ${name} dont have any favorite recepies`);
   }
 
-  if (user.favorite.length <= 0) {
-    throw HttpError(404, `User ${user.name} dont have any favorite recepies`);
-  }
-
-  const data = await Recipe.find({ _id: { $in: user.favorite } });
+  const data = await Recipe.find({ _id: { $in: favorite } });
 
   const result = await Promise.all(
     data.map(async (r) => {
@@ -39,7 +32,7 @@ const getFavorites = async (req, res) => {
         tags: r.tags,
         createdAt: r.createdAt,
         updatedAt: r.updatedAt,
-        ingredients: await getRecipeIngredients(r.ingredients, authorization),
+        ingredients: await getRecipeIngredients(r.ingredients),
       };
     })
   );

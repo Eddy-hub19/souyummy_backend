@@ -3,7 +3,6 @@ const createError = require("http-errors");
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
-  console.log(verificationToken);
   const user = await User.findOne({ verificationToken: verificationToken });
   if (!user) {
     throw createError(404, "User not found");
