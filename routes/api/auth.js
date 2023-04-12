@@ -28,6 +28,6 @@ router.post("/logout", authenticate, crtl.logout);
 
 router.post("/picture", authenticate, upload.single("file"), saveImages);
 
-router.patch("/avatar", authenticate, upload.single("file"), updateAvatar);
+router.patch("/avatar", authenticate, upload.single("picture"), updateAvatar);
 
 module.exports = router;
