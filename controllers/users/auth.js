@@ -119,7 +119,7 @@ const subscribe = async (req, res) => {
   const sendingEmail = {
     to: email,
     subject: "Subscribe confirmation from Soyummy ",
-    html: `<p>  Hi. You're email is sucessfully subsribed. Thank you! </p>`,
+    html: `<p>  Hi. Your email is successfully subscribed. Thank you! </p>`,
   };
 
   await sendEmail(sendingEmail);
