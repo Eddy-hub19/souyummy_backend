@@ -4,7 +4,6 @@ const { HttpError } = require("../../routes/errors/HttpErrors");
 const getRecipeIngredients = require("../../utils/getIngredientsForRecipe");
 
 const getPopularRecipes = async (req, res) => {
-  const { authorization = "" } = req.headers;
   const filter = {};
   const allRecipes = await Recipe.find(filter).sort("-popularity").limit(10);
 
@@ -32,7 +31,7 @@ const getPopularRecipes = async (req, res) => {
         tags: r.tags,
         createdAt: r.createdAt,
         updatedAt: r.updatedAt,
-        ingredients: await getRecipeIngredients(r.ingredients, authorization),
+        ingredients: await getRecipeIngredients(r.ingredients),
       };
     })
   );

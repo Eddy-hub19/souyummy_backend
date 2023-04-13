@@ -1,11 +1,14 @@
-const getIngredientsList = require("../utils/getIngredientsList");
+const { Ingredient } = require("../models/recipes");
 
-const getRecipeIngredients = async (recipeIngredients, token) => {
-  const allIngredientList = await getIngredientsList(token);
+const getRecipeIngredients = async (recipeIngredients) => {
+  const allIngredientList = await Ingredient.find({
+    _id: {
+      $in: recipeIngredients.map((recipeIngredient) => recipeIngredient.id),
+    },
+  });
 
   return recipeIngredients.reduce((acc, currentIngredient, index) => {
-    const data = allIngredientList.filter((ingredient) => ingredient._id === currentIngredient.id.valueOf());
-    return [...acc, { ...recipeIngredients[index], ...data[0] }];
+    return [...acc, { ...currentIngredient, ...allIngredientList[index]._doc }];
   }, []);
 };
 

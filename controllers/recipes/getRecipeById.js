@@ -4,7 +4,6 @@ const { HttpError } = require("../../routes/errors/HttpErrors");
 const getRecipeIngredients = require("../../utils/getIngredientsForRecipe");
 
 const getRecipeById = async (req, res) => {
-  const { authorization = "" } = req.headers;
   const { id } = req.params;
 
   const recepipe = await Recipe.findOne({ _id: id });
@@ -31,7 +30,7 @@ const getRecipeById = async (req, res) => {
     tags: recepipe.tags,
     createdAt: recepipe.createdAt,
     updatedAt: recepipe.updatedAt,
-    ingredients: [...(await getRecipeIngredients(recepipe.ingredients, authorization))],
+    ingredients: [...(await getRecipeIngredients(recepipe.ingredients))],
   };
 
   res.json(result);
