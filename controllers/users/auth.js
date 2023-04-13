@@ -108,6 +108,8 @@ const login = async (req, res) => {
 const subscribe = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
+  console.log('subscr', user)
+
   if (!user) {
     throw HttpError(401, "Email not found");
   }
@@ -116,8 +118,8 @@ const subscribe = async (req, res) => {
   });
   const sendingEmail = {
     to: email,
-    subject: "email verification",
-    html: `<p>  user subscribed </p>`,
+    subject: "Subscribe confirmation from Soyummy ",
+    html: `<p>  Hi. You're email is sucessfully subsribed. Thank you! </p>`,
   };
 
   await sendEmail(sendingEmail);
