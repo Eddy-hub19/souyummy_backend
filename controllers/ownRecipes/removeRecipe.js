@@ -1,6 +1,6 @@
 const { Recipe } = require("../../models");
 const { HttpError } = require("../../helpers");
-// ======================================================= //
+
 const removeRecipe = async (req, res, next) => {
   const result = await Recipe.findByIdAndDelete({ _id: req.params.recipeId });
 
@@ -10,6 +10,5 @@ const removeRecipe = async (req, res, next) => {
 
   res.status(200).json({ message: "Recipe deleted" });
 };
-// ======================================================= //
 
 module.exports = removeRecipe;

@@ -1,5 +1,4 @@
 const { Recipe } = require("../../models");
-// ======================================================= //
 const addRecipe = async (req, res, next) => {
   const newRecipe = await Recipe.create({
     ...req.body,
@@ -8,6 +7,5 @@ const addRecipe = async (req, res, next) => {
 
   res.json(newRecipe);
 };
-// ======================================================= //
 
 module.exports = addRecipe;
