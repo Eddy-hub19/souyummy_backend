@@ -57,27 +57,22 @@ const recipeSchema = Schema(
     },
     popularity: {
       type: Number,
-      // required: true,
       default: "",
     },
     favorites: {
       type: Array,
-      // required: true,
       default: [],
     },
     likes: {
       type: Array,
-      // required: true,
       default: [],
     },
     youtube: {
       type: String,
-      // required: true,
       default: "",
     },
     tags: {
       type: Array,
-      // required: true,
       default: [],
     },
 

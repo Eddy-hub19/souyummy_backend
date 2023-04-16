@@ -10,7 +10,3 @@ const getCategories = async (req, res) => {
 };
 
 module.exports = getCategories;
-
-// const getCategories = async(res) => {
-//     res.json(await Recipe.distinct('category'));
-// };

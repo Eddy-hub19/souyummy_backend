@@ -2,7 +2,6 @@ const { Ingredient, Recipe } = require("../../models");
 const { firstCapitalLetter } = require("../../helpers");
 
 const getRecipesByIngredient = async (req, res) => {
-  // const ingredientName = req.query.ttl;
   const ingredientName = firstCapitalLetter(req.params.ingredientName);
 
   if (!ingredientName) {
