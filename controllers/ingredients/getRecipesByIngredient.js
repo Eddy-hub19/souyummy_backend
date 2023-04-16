@@ -1,5 +1,6 @@
 const { Ingredient, Recipe } = require("../../models");
 const { firstCapitalLetter } = require("../../helpers");
+const mongoose = require("mongoose");
 
 const getRecipesByIngredient = async (req, res) => {
   const ingredientName = firstCapitalLetter(req.params.ingredientName);
@@ -19,7 +20,9 @@ const getRecipesByIngredient = async (req, res) => {
 
     const ingredientId = ingredient._id;
 
-    const matchedRecipes = await Recipe.find({ "ingredients.id": ingredientId }).populate("ingredients.id");
+    const matchedRecipes = await Recipe.find({ "ingredients.id": mongoose.Types.ObjectId(ingredientId) }).populate(
+      "ingredients.id"
+    );
 
     res.json(matchedRecipes);
   } catch (error) {

@@ -24,8 +24,57 @@ const register = async (rec, res) => {
   const newUser = await User.create({ ...rec.body, password: hashPassword, avatarURL, verificationCode });
   const verifyEmail = {
     to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}" >Click to verify email</a>`,
+    subject: "Email Verification",
+    html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Please activate your account</title>
+  <!--[if mso]><style type="text/css">body, table, td, a { font-family: Arial, Helvetica, sans-serif !important; }</style><![endif]-->
+</head>
+
+<body style="font-family: Helvetica, Arial, sans-serif; margin: 0px; padding: 0px; background-color: #ffffff;">
+  <table role="presentation"
+    style="width: 100%; border-collapse: collapse; border: 0px; border-spacing: 0px; font-family: Arial, Helvetica, sans-serif; background-color: rgb(235, 243, 212);">
+    <tbody>
+      <tr>
+        <td align="center" style="padding: 1rem 2rem; vertical-align: top; width: 100%;">
+          <table role="presentation" style="max-width: 600px; border-collapse: collapse; border: 0px; border-spacing: 0px; text-align: left;">
+            <tbody>
+              <tr>
+                <td style="padding: 40px 0px 0px;">
+                  <div style="text-align: right;">
+                    <div style="padding-bottom: 20px;"><img
+                        src="https://eddy-hub19.github.io/soyummy/static/media/logo_desc.3326a095578a5f612526f7ab93edd379.svg" alt="So Yummy"
+                        style="width: 80px;"></div>
+                  </div>
+                  <div style="padding: 20px; background-color: rgb(235, 243, 212);">
+                    <div style="color: rgb(25, 26, 20); text-align: left;">
+                      <h1 style="margin: 1rem 0">Final step...</h1>
+                      <p style="padding-bottom: 16px">Follow this link to verify your email address.</p>
+                      <p style="padding-bottom: 16px"><a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}"
+                          style="padding: 12px 24px; border-radius: 4px; color: #FFF; background: #2B52F5;display: inline-block;margin: 0.5rem 0;">Confirm
+                          now</a></p>
+                      <p style="padding-bottom: 16px">If you didn’t ask to verify this address, you can ignore this email.</p>
+                      <p style="padding-bottom: 16px">Thanks,<br>The So-Yummy team</p>
+                    </div>
+                  </div>
+                  <div style="padding-top: 20px; color: rgb(139, 170, 54); text-align: center;">
+                    <p style="padding-bottom: 16px">Enjoy you recipes with us ♥</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>`,
   };
   await sendEmail(verifyEmail);
 
@@ -68,8 +117,57 @@ const resendVerifyEmail = async (req, res) => {
 
   const verifyEmail = {
     to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BASE_URL}/auth/verify/${user.verificationCode}" >Click to verify email</a>`,
+    subject: "Email Verification",
+    html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Please activate your account</title>
+  <!--[if mso]><style type="text/css">body, table, td, a { font-family: Arial, Helvetica, sans-serif !important; }</style><![endif]-->
+</head>
+
+<body style="font-family: Helvetica, Arial, sans-serif; margin: 0px; padding: 0px; background-color: #ffffff;">
+  <table role="presentation"
+    style="width: 100%; border-collapse: collapse; border: 0px; border-spacing: 0px; font-family: Arial, Helvetica, sans-serif; background-color: rgb(235, 243, 212);">
+    <tbody>
+      <tr>
+        <td align="center" style="padding: 1rem 2rem; vertical-align: top; width: 100%;">
+          <table role="presentation" style="max-width: 600px; border-collapse: collapse; border: 0px; border-spacing: 0px; text-align: left;">
+            <tbody>
+              <tr>
+                <td style="padding: 40px 0px 0px;">
+                  <div style="text-align: right;">
+                    <div style="padding-bottom: 20px;"><img
+                        src="https://eddy-hub19.github.io/soyummy/static/media/logo_desc.3326a095578a5f612526f7ab93edd379.svg" alt="So Yummy"
+                        style="width: 80px;"></div>
+                  </div>
+                  <div style="padding: 20px; background-color: rgb(235, 243, 212);">
+                    <div style="color: rgb(25, 26, 20); text-align: left;">
+                      <h1 style="margin: 1rem 0">Final step...</h1>
+                      <p style="padding-bottom: 16px">Follow this link to verify your email address.</p>
+                      <p style="padding-bottom: 16px"><a target="_blank" href="${BASE_URL}/auth/verify/${verificationCode}"
+                          style="padding: 12px 24px; border-radius: 4px; color: #FFF; background: #2B52F5;display: inline-block;margin: 0.5rem 0;">Confirm
+                          now</a></p>
+                      <p style="padding-bottom: 16px">If you didn’t ask to verify this address, you can ignore this email.</p>
+                      <p style="padding-bottom: 16px">Thanks,<br>The So-Yummy team</p>
+                    </div>
+                  </div>
+                  <div style="padding-top: 20px; color: rgb(139, 170, 54); text-align: center;">
+                    <p style="padding-bottom: 16px">Enjoy you recipes with us ♥</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>`,
   };
 
   await sendEmail(verifyEmail);
@@ -108,6 +206,8 @@ const login = async (req, res) => {
 const subscribe = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
+  console.log("subscr", user);
+
   if (!user) {
     throw HttpError(401, "Email not found");
   }
@@ -116,8 +216,59 @@ const subscribe = async (req, res) => {
   });
   const sendingEmail = {
     to: email,
-    subject: "email verification",
-    html: `<p>  user subscribed </p>`,
+    subject: "Subscribe confirmation from So-Yummy ",
+    html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank you for subscribing</title>
+  <!--[if mso]><style type="text/css">body, table, td, a { font-family: Arial, Helvetica, sans-serif !important; }</style><![endif]-->
+</head>
+
+<body style="font-family: Helvetica, Arial, sans-serif; margin: 0px; padding: 0px; background-color: #ffffff;">
+  <table role="presentation"
+    style="width: 100%; border-collapse: collapse; border: 0px; border-spacing: 0px; font-family: Arial, Helvetica, sans-serif; background-color: rgb(235, 243, 212);">
+    <tbody>
+      <tr>
+        <td align="center" style="padding: 1rem 2rem; vertical-align: top; width: 100%;">
+          <table role="presentation" style="max-width: 600px; border-collapse: collapse; border: 0px; border-spacing: 0px; text-align: left;">
+            <tbody>
+              <tr>
+                <td style="padding: 40px 0px 0px;">
+                  <div style="text-align: right;">
+                    <div style="padding-bottom: 20px;"><img
+                        src="https://eddy-hub19.github.io/soyummy/static/media/logo_desc.3326a095578a5f612526f7ab93edd379.svg" alt="Company"
+                        style="width: 56px;"></div>
+                  </div>
+                  <div style="padding: 20px; background-color: rgb(235, 243, 212);">
+                    <div style="color: rgb(0, 0, 0); text-align: left;">
+                      <h1 style="margin: 1rem 0">Thanks for subscribing!</h1>
+                      <p style="padding-bottom: 16px">The So-Yummy Newsletter is the best way to find out about the universe of the recipes <em>...and
+                          beyond</em>.</p>
+                      <p style="padding-bottom: 16px">Once or twice a month, you will now receive our newsletter with information about new,
+                        breakfasts, miscellaneous and desserts, as well as 100 way to make delicious chicken, new discoveries and much more. </p>
+                      <p style="padding-bottom: 16px">Of course, you can't manage your subscription and you will receive the mails from us till
+                        the end of the entire world ;)</p>
+                      <p style="padding-bottom: 16px">We're really happy to have you on board!</p>
+                      <p style="padding-bottom: 16px">Best regards,<br><em>The So-Yummy team</em></p>
+                    </div>
+                  </div>
+                  <div style="padding-top: 20px; color: rgb(153, 153, 153); text-align: center;">
+                    <p style="padding-bottom: 16px">Made with ♥ in Zhmerynka</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+
+</html>`,
   };
 
   await sendEmail(sendingEmail);

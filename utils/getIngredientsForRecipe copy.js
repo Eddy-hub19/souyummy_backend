@@ -1,11 +1,10 @@
 const { Ingredient } = require("../models/recipes");
 
 const getRecipeIngredients = async (recipeIngredients) => {
+  console.log(recipeIngredients);
   const allIngredientList = await Ingredient.find({
     _id: {
-      $in: recipeIngredients.map((recipeIngredient) =>
-        recipeIngredient.id ? recipeIngredient.id : recipeIngredient.ingredient
-      ),
+      $in: recipeIngredients.map((recipeIngredient) => recipeIngredient.id),
     },
   });
 
