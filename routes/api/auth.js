@@ -22,6 +22,8 @@ router.post("/login", validateBody(schemas.loginSchema), crtl.login);
 
 router.post("/subscribe", validateBody(schemas.subscribeSchema), crtl.subscribe);
 
+router.get("/unsubscribe/:_id" , crtl.unsubscribe )
+
 router.get("/current", authenticate, crtl.getCurrent);
 
 router.post("/logout", authenticate, crtl.logout);

@@ -257,7 +257,8 @@ const subscribe = async (req, res) => {
                   </div>
                   <div style="padding-top: 20px; color: rgb(153, 153, 153); text-align: center;">
                     <p style="padding-bottom: 16px">Made with ♥ in Zhmerynka</p>
-                  </div>
+                    </div>
+                    <p> If you want to unsubscribe, please, click <a href ="https://determined-ruby-nematode.cyclic.app/unsubscribe/${user._id}">here</a></p>
                 </td>
               </tr>
             </tbody>
@@ -277,6 +278,21 @@ const subscribe = async (req, res) => {
     message: "user subscribed, email sending success",
   });
 };
+
+const unsubscribe =async(req, res) => {
+  try{
+    const {_id} = req.params;
+    await User.findByIdAndUpdate(_id, {
+      subscription: false,
+    });
+    res.json({
+      message: "user unsubscribed",
+    })
+  } catch {
+    res.status(500).send("unsubscribe failed");
+  }
+  
+}
 
 const getCurrent = async (req, res) => {
   const user = req.user;
@@ -299,4 +315,5 @@ module.exports = {
   getCurrent: ctrlWraper(getCurrent),
   logout: ctrlWraper(logout),
   subscribe: ctrlWraper(subscribe),
+  unsubscribe: ctrlWraper(unsubscribe)
 };
