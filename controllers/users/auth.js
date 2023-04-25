@@ -258,7 +258,9 @@ const subscribe = async (req, res) => {
                   <div style="padding-top: 20px; color: rgb(153, 153, 153); text-align: center;">
                     <p style="padding-bottom: 16px">Made with ♥ in Zhmerynka</p>
                     </div>
-                    <p> If you want to unsubscribe, please, click <a href ="https://determined-ruby-nematode.cyclic.app/unsubscribe/${user._id}">here</a></p>
+                    <div style="padding-top: 20px; color: rgb(153, 153, 153); text-align: center;">
+                    <p> If you want to unsubscribe, please, click <a href ="https://determined-ruby-nematode.cyclic.app/auth/unsubscribe/${user._id}">here</a></p>
+                    </div>
                 </td>
               </tr>
             </tbody>
