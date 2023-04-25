@@ -6,8 +6,11 @@ const getRecipeIngredients = require("../../utils/getIngredientsForRecipe");
 const getFavorites = async (req, res) => {
   const { favorite, name } = req.user;
 
-  if (favorite.length <= 0) {
-    throw HttpError(404, `User ${name} dont have any favorite recepies`);
+  if (!favorite.length) {
+    res.status(201).json({
+      code: 201,
+      result: [],
+    });  
   }
 
   const data = await Recipe.find({ _id: { $in: favorite } });
@@ -38,7 +41,7 @@ const getFavorites = async (req, res) => {
   );
 
   res.status(201).json({
-    status: `succes, we have found ${result.length} position(s)`,
+    status: `success, we have found ${result.length} position(s)`,
     code: 201,
     result,
   });
