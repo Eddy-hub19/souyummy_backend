@@ -9,9 +9,16 @@ const getRecipeIngredients = async (recipeIngredients) => {
     },
   });
 
-  return recipeIngredients.reduce((acc, currentIngredient, index) => {
-    return [...acc, { ...currentIngredient, ...allIngredientList[index]._doc }];
-  }, []);
+  let merged = [];
+
+  for(let i=0; i<allIngredientList.length; i++) {
+    merged.push({
+     ...allIngredientList[i]._doc, 
+     ...(recipeIngredients.find((itmInner) => JSON.stringify(itmInner.ingredient) == JSON.stringify(allIngredientList[i]._id)))}
+    );
+  }
+
+  return merged;
 };
 
 module.exports = getRecipeIngredients;
