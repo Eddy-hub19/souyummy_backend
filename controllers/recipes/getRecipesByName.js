@@ -13,7 +13,7 @@ const getRecipesByName = async (req, res) => {
 
   try {
     let recepiesCount;
-    let recepies;
+    let recepies = [];
     if (type === 'title') {
         // by name
 
@@ -25,17 +25,23 @@ const getRecipesByName = async (req, res) => {
     } else {
          // by ingridients
 
-        let ingredient = await Ingredient.findOne({ ttl: new RegExp(keyWord, "i") });
-        let id = JSON.parse(JSON.stringify(ingredient))?._id;
-        let objectId = new mongoose.Types.ObjectId(id);
-        recepies = await Recipe.find({ "ingredients.id": objectId }).skip(startIndex).limit(endIndex);
-        recepiesCount = await Recipe.find({ "ingredients.id": objectId }).count();
+        let ingredients = await Ingredient.find({ ttl: new RegExp(keyWord, "i") });
+        console.log(ingredients.length);
+        for (const ingredient of ingredients) {
+            let id = JSON.parse(JSON.stringify(ingredient))?._id;
+
+            let objectId = new mongoose.Types.ObjectId(id);
+            let foundR = await Recipe.find({ "ingredients.id": objectId });
+            console.log(ingredient.ttl, foundR.length);
+            recepies.push(...foundR);
+        }
+        recepiesCount = recepies.length;
     }
 
     res.json({
       prevPage: page === "1" ? false : true,
       nextPage: recepiesCount > page * limit ? true : false,
-      recepies: recepies.slice(0, limit),
+      recepies: recepies.slice(startIndex, endIndex),
     });
   } catch (e) {
     console.log(e);
