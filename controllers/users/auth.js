@@ -100,9 +100,7 @@ const verifyEmail = async (req, res) => {
     verify: true,
   });
 
-  res.json({
-    message: "Email verify succsess",
-  });
+  res.redirect('https://eddy-hub19.github.io/soyummy/signin?emailConfirmed=true');
 };
 
 const resendVerifyEmail = async (req, res) => {
