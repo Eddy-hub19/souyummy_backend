@@ -10,7 +10,8 @@ const getFavorites = async (req, res) => {
     res.status(201).json({
       code: 201,
       result: [],
-    });  
+    });
+    return;  
   }
 
   const data = await Recipe.find({ _id: { $in: favorite } });

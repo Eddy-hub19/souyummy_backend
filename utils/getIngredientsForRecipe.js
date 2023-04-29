@@ -14,7 +14,7 @@ const getRecipeIngredients = async (recipeIngredients) => {
   for(let i=0; i<allIngredientList.length; i++) {
     merged.push({
      ...allIngredientList[i]._doc, 
-     ...(recipeIngredients.find((itmInner) => JSON.stringify(itmInner.ingredient) == JSON.stringify(allIngredientList[i]._id)))}
+     ...(recipeIngredients.find((itmInner) => JSON.stringify(itmInner.ingredient ? itmInner.ingredient : itmInner.id) == JSON.stringify(allIngredientList[i]._id)))}
     );
   }
 
