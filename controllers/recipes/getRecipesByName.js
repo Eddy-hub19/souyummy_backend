@@ -26,22 +26,21 @@ const getRecipesByName = async (req, res) => {
          // by ingridients
 
         let ingredients = await Ingredient.find({ ttl: new RegExp(keyWord, "i") });
-        console.log(ingredients.length);
         for (const ingredient of ingredients) {
             let id = JSON.parse(JSON.stringify(ingredient))?._id;
 
             let objectId = new mongoose.Types.ObjectId(id);
             let foundR = await Recipe.find({ "ingredients.id": objectId });
-            console.log(ingredient.ttl, foundR.length);
             recepies.push(...foundR);
         }
         recepiesCount = recepies.length;
+        recepies = recepies.slice(startIndex, endIndex);
     }
 
     res.json({
       prevPage: page === "1" ? false : true,
       nextPage: recepiesCount > page * limit ? true : false,
-      recepies: recepies.slice(startIndex, endIndex),
+      recepies: recepies,
     });
   } catch (e) {
     console.log(e);
