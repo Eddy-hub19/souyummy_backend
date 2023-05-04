@@ -22,7 +22,8 @@ const authenticate = async (req, res, next) => {
 
     next();
   } catch {
-    next(HttpError(401));
+    res.redirect('https://eddy-hub19.github.io/soyummy/signin');
+    // next(HttpError(401));
   }
 };
 
