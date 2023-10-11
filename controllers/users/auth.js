@@ -76,7 +76,7 @@ const register = async (rec, res) => {
 
 </html>`,
   };
-  await sendEmail(verifyEmail);
+  // await sendEmail(verifyEmail);
 
   // const payload = {
   //   id: newUser._id,
@@ -100,7 +100,7 @@ const verifyEmail = async (req, res) => {
     verify: true,
   });
 
-  res.redirect('https://eddy-hub19.github.io/soyummy/signin?emailConfirmed=true');
+  res.redirect("https://eddy-hub19.github.io/soyummy/signin?emailConfirmed=true");
 };
 
 const resendVerifyEmail = async (req, res) => {
@@ -280,20 +280,19 @@ const subscribe = async (req, res) => {
   });
 };
 
-const unsubscribe =async(req, res) => {
-  try{
-    const {_id} = req.params;
+const unsubscribe = async (req, res) => {
+  try {
+    const { _id } = req.params;
     await User.findByIdAndUpdate(_id, {
       subscription: false,
     });
     res.json({
       message: "user unsubscribed",
-    })
+    });
   } catch {
     res.status(500).send("unsubscribe failed");
   }
-  
-}
+};
 
 const getCurrent = async (req, res) => {
   const user = req.user;
@@ -316,5 +315,5 @@ module.exports = {
   getCurrent: ctrlWraper(getCurrent),
   logout: ctrlWraper(logout),
   subscribe: ctrlWraper(subscribe),
-  unsubscribe: ctrlWraper(unsubscribe)
+  unsubscribe: ctrlWraper(unsubscribe),
 };
